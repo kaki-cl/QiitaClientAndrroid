@@ -2,7 +2,6 @@ package com.example.atuski.qiitaqlient;
 
 import android.content.Context;
 import android.databinding.ObservableField;
-import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,15 +22,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.stream.Stream;
 import com.annimon.stream.Stream;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -48,7 +43,6 @@ public class OnKeyListener implements View.OnKeyListener {
         this.qiitaItemAdapter = qiitaItemAdapter;
 
     }
-
 
     @Override
     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
@@ -107,9 +101,6 @@ public class OnKeyListener implements View.OnKeyListener {
                             repo.setUrl(r.url);
                             repos.add(repo);
 
-//                            qiitaItemAdapter.list.add(repo)
-//                            qiitaListAdapter.add(repos);
-
                     Log.d("search debug", r.title);
                     Log.d("search debug", r.url);
                 }
@@ -122,46 +113,6 @@ public class OnKeyListener implements View.OnKeyListener {
 
 
 
-
-            // todo ObservableListが返ってくるようにする
-//            Call<List<Repo>> call = servise.listRepos(text);
-//
-//            call.enqueue(new Callback<List<Repo>>() {
-//                @Override
-//                public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {
-//                    if (call.isExecuted()) {
-//
-//                        // 前の検索結果があれば上書きしたいので消去する。
-////                        qiitaListAdapter.clear();
-//
-//                        List<Repo> result = response.body();
-//                        List<Repo> repos = new ArrayList<>();
-//
-//                        // 拡張for文
-//                        for (Repo r : result) {
-//                            Repo repo = new Repo();
-//                            User user = new User();
-//                            user.setProfile_image_url(r.getUser().profile_image_url);
-//                            repo.setUser(user);
-//                            repo.setId(r.id);
-//                            repo.setTitle(r.title);
-//                            repo.setUrl(r.url);
-//                            repos.add(repo);
-//
-//                            //qiitaItemAdapter.list.add
-////                            qiitaListAdapter.add(repos);
-//                            Log.d("search debug", r.title);
-//                            Log.d("search debug", r.url);
-//                        }
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<List<Repo>> call, Throwable t) {
-//
-//                }
-//            });
 
         }
 
