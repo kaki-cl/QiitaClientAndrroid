@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.example.atuski.qiitaqlient"
+        minSdkVersion 24
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //todo なんだっけあとで調べる？
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled = true
+    }
+    /**
+     * https://github.com/ReactiveX/RxJava/issues/4445
+     *
+     */
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    compile "com.android.support:design:${supportLibraryVersion}"
+
+
+    //todo なんだっけあとで調べる？
+//    compile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
+//    compile 'com.android.support:design:' + rootProject.supportLibVersion
+//    compile 'com.android.support:support-v4:' + rootProject.supportLibVersion
+//    compile 'io.reactivex.rxjava2:rxandroid:' + rootProject + '2.0.1'
+
+//    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    def rxjava2_version = '2.0.1'
+    compile "io.reactivex.rxjava2:rxjava:$rxjava2_version"// 同じバージョンでやったほうがいい。
+    compile "io.reactivex.rxjava2:rxandroid:$rxjava2_version" // これがないとAndroidSchedulersクラスが使えない
+
+    //todo 本当に使わないといけないのか後で精査
+    compile 'com.annimon:stream:1.1.5'
+
+    def retrofitVersion = '2.4.0'
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    //todo update
+    compile 'com.squareup.retrofit:converter-jackson:2.0.0-beta2'
+
+    compile 'org.projectlombok:lombok:1.16.20'
+}

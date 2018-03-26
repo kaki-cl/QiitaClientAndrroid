@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.atuski.qiitaqlient.viewmodel.MainViewModel" />
+    </data>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.atuski.qiitaqlient.MainActivity">
+
+
+
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:hint="Keyword"
+            android:inputType="text"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/qiita_list_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/edit_text"
+            tools:listitem="@layout/list_item"/>
+
+        <Button
+            android:id="@+id/buttonLap"
+            android:text="Debug Button"
+            android:onClick="@{viewModel.onClick}"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+</layout>
+
