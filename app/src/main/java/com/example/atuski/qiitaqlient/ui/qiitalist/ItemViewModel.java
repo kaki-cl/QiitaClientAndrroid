@@ -3,7 +3,7 @@ package com.example.atuski.qiitaqlient.ui.qiitalist;
 import android.databinding.ObservableField;
 import android.util.Log;
 
-import com.example.atuski.qiitaqlient.data.Repo;
+import com.example.atuski.qiitaqlient.model.Repo;
 
 
 

@@ -2,8 +2,8 @@ package com.example.atuski.qiitaqlient;
 
 import android.app.Application;
 
+import com.example.atuski.qiitaqlient.model.OrmaDatabase;
 import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
-import com.raizlabs.android.dbflow.config.FlowManager;
 
 /**
  * Created by atuski on 2018/03/27.
@@ -17,13 +17,15 @@ public class QiitaQlientApp extends Application {
         return app;
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
-        app = this;
+
+        this.app = this;
     }
 
     public QiitaListRepository getRepository() {
-        return QiitaListRepository.getInstance();
+        return QiitaListRepository.getInstance(getApplicationContext());
     }
 }

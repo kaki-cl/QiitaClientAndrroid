@@ -14,9 +14,12 @@ import android.widget.EditText;
 
 import com.annimon.stream.Stream;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
-import com.example.atuski.qiitaqlient.data.Repo;
-import com.example.atuski.qiitaqlient.data.User;
+import com.example.atuski.qiitaqlient.model.OrmaDatabase;
+import com.example.atuski.qiitaqlient.model.Repo;
+import com.example.atuski.qiitaqlient.model.Repo_Selector;
+import com.example.atuski.qiitaqlient.model.User;
 import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
+import com.github.gfx.android.orma.Inserter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -24,7 +27,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -48,8 +53,73 @@ public class MainViewModel {
     }
 
     public void onClick(View view) {
-        String str = this.itemViewModels.get(0).repo.get().getTitle();
-        Log.v("MainViewModel onClick", str);
+//        String str = this.itemViewModels.get(0).repo.get().getTitle();
+//        Log.v("MainViewModel onClick", str);
+
+//Orma
+//        Repo repo = new Repo();
+//        repo.title = "test_title";
+////        repo.id = "testID";
+//        repo.url = "test url";
+//
+//        OrmaDatabase ormaDatabase = QiitaListRepository.getOrmaDatabase();
+//        Inserter<Repo> inserter = ormaDatabase.prepareInsertIntoRepo();
+//        inserter.execute(repo);
+//        inserter.execute(repo);
+//
+//        Repo_Selector selector = ormaDatabase.selectFromRepo();
+
+//        for (Repo r : selector) {
+//            Log.v("test DBFlow Title", r.getTitle());
+//            Log.v("test DBFlow Id", String.valueOf(r.getId()));
+//        }
+
+
+
+
+
+
+
+// DBFlow
+
+
+//        Repo repo = new Repo();
+//        repo.title = "test_title4";
+////        repo.id = "testID";
+//        repo.url = "test url";
+//
+//        ModelAdapter<Repo> adapter = FlowManager.getModelAdapter(Repo.class);
+//        adapter.insert(repo);
+//        adapter.insert(repo);
+//        adapter.insert(repo);
+//
+////
+//        List<Repo> repos = SQLite.select()
+//                .from(Repo.class)
+//                .queryList();
+//
+//        for (Repo r : repos) {
+//            Log.v("test DBFlow Title", r.getTitle());
+////            Log.v("test DBFlow Id", r.getId());
+//        }
+//
+//        Log.v("test DBFlow Size", String.valueOf(repos.size()));
+//
+//        repo.title = "test_title2";
+//        adapter.update(repo);
+//
+//
+//        List<RepoTable> repos2 = SQLite.select()
+//                .from(RepoTable.class)
+//                .queryList();
+//
+//        Log.v("test DBFlow", repos2.get(0).getTitle());
+
+
+
+//        Delete.table(RepoTable.class);
+//        context.deleteDatabase(GithubDatabase.NAME);
+
     }
 
     public View.OnKeyListener setOnKeyListener() {
@@ -81,27 +151,49 @@ public class MainViewModel {
                 repository.searchRepo(text)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe((result) -> {
+                        .subscribe(new Observer<List<Repo>>() {
+
+                            @Override
+                            public void onNext(List<Repo> result) {
+                            Log.v("MainViewModel", "004");
 
                             List<Repo> repoList = new ArrayList<>();
                             for (Repo r : result) {
                                 Repo repo = new Repo();
                                 User user = new User();
-                                user.setProfile_image_url(r.getUser().profile_image_url);
-                                repo.setUser(user);
-                                repo.setId(r.id);
+//                                user.setProfile_image_url(r.getUser().profile_image_url);
+//                                repo.setUser(user);
+//                                repo.setId(r.id);
                                 repo.setTitle(r.title);
                                 repo.setUrl(r.url);
                                 repoList.add(repo);
 
                                 Log.d("search debug", r.title);
                                 Log.d("search debug", r.url);
+                                ///  https://qiita.com//api/v2/items/?query=dargon
                             }
 
                             // todo
                             //StreamはJava8のAPIの方じゃだめ？
                             itemResults.onNext(Stream.of(repoList).map(repo -> new ItemViewModel(new ObservableField<>(repo))).toList());
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.v("MainViewModel", e.getMessage());
+                                Log.v("MainViewModel", e.getLocalizedMessage());
+                                e.printStackTrace();
+
+                            }
+
+                            @Override
+                            public void onSubscribe(Disposable d) {}
+
+                            @Override
+                            public void onComplete() {}
                         });
+
 
                 return true;
             }

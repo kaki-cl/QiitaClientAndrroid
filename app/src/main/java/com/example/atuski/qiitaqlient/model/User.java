@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.data;
+package com.example.atuski.qiitaqlient.model;
 
 import lombok.Data;
 
