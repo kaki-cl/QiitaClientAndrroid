@@ -73,53 +73,6 @@ public class MainViewModel {
 //            Log.v("test DBFlow Title", r.getTitle());
 //            Log.v("test DBFlow Id", String.valueOf(r.getId()));
 //        }
-
-
-
-
-
-
-
-// DBFlow
-
-
-//        Repo repo = new Repo();
-//        repo.title = "test_title4";
-////        repo.id = "testID";
-//        repo.url = "test url";
-//
-//        ModelAdapter<Repo> adapter = FlowManager.getModelAdapter(Repo.class);
-//        adapter.insert(repo);
-//        adapter.insert(repo);
-//        adapter.insert(repo);
-//
-////
-//        List<Repo> repos = SQLite.select()
-//                .from(Repo.class)
-//                .queryList();
-//
-//        for (Repo r : repos) {
-//            Log.v("test DBFlow Title", r.getTitle());
-////            Log.v("test DBFlow Id", r.getId());
-//        }
-//
-//        Log.v("test DBFlow Size", String.valueOf(repos.size()));
-//
-//        repo.title = "test_title2";
-//        adapter.update(repo);
-//
-//
-//        List<RepoTable> repos2 = SQLite.select()
-//                .from(RepoTable.class)
-//                .queryList();
-//
-//        Log.v("test DBFlow", repos2.get(0).getTitle());
-
-
-
-//        Delete.table(RepoTable.class);
-//        context.deleteDatabase(GithubDatabase.NAME);
-
     }
 
     public View.OnKeyListener setOnKeyListener() {
