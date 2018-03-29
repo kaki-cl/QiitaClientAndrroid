@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.views.adapter;
+package com.example.atuski.qiitaqlient.ui.qiitalist;
 
 import android.content.Context;
 import android.databinding.ObservableList;
@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.ListItemBinding;
-import com.example.atuski.qiitaqlient.viewmodel.ItemViewModel;
+import com.example.atuski.qiitaqlient.ui.adapter.BindingHolder;
+import com.example.atuski.qiitaqlient.ui.adapter.ObservableListRecyclerAdapter;
+import com.example.atuski.qiitaqlient.ui.qiitalist.ItemViewModel;
 
 import java.util.List;
 
@@ -22,25 +24,21 @@ public class QiitaItemAdapter extends ObservableListRecyclerAdapter<ItemViewMode
         this.context = context;
     }
 
-    //ここで
-    // データの取得とviewHolderへの設定を行う。
     @Override
     public BindingHolder<ListItemBinding> onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        //todo そもそもこれがコールされてない！！
         Log.v("QiitaItemAdapter", "onCreateViewHolder");
 
-//        // アイテム単位のレイアウトファイルのインフレート
-//        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-//        // viewHolderの生成
-//        return new OriginalViewHolder(inflate);
+        // アイテム単位のレイアウトファイルのインフレート
+        // viewHolderの生成
         return new BindingHolder<>(context, parent, R.layout.list_item);
     }
 
     @Override
     public void onBindViewHolder(BindingHolder<ListItemBinding> holder, int position) {
+
         //データを取得
-        ItemViewModel itemViewModel = this.list.get(position);
+        ItemViewModel itemViewModel = getItem(position);
 
         Log.v("QiitaItemAdapteronBindViewHolder", itemViewModel.repo.get().getTitle());
 

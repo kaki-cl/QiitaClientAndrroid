@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.views.adapter;
+package com.example.atuski.qiitaqlient.ui.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -18,7 +18,10 @@ public class BindingHolder<T extends ViewDataBinding> extends RecyclerView.ViewH
     public final T binding;
 
     public BindingHolder(@NonNull Context context, @NonNull ViewGroup parent, @LayoutRes int layoutResId) {
+        // Viewツリーを生成してitemViewフィールドに保存してそう。
         super(LayoutInflater.from(context).inflate(layoutResId, parent, false));
+        // このBindingHolderのbindingフィールドとViewツリーを関連付けている。
+        // このbindingにアクセスすることでバインドさせたいデータを同期させられる。
         binding = DataBindingUtil.bind(itemView);
     }
 }

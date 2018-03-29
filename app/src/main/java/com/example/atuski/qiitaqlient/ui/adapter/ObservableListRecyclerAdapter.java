@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.views.adapter;
+package com.example.atuski.qiitaqlient.ui.adapter;
 
 /**
  * Created by atuski on 2018/03/26.

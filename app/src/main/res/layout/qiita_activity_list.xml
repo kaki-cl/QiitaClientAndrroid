@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.atuski.qiitaqlient.viewmodel.MainViewModel" />
+            type="com.example.atuski.qiitaqlient.ui.qiitalist.MainViewModel" />
     </data>
 
     <RelativeLayout
@@ -16,7 +16,25 @@
         tools:context="com.example.atuski.qiitaqlient.MainActivity">
 
 
+        <!--<android.widget.SearchView-->
+            <!--android:id="@+id/edit_text"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:hint="Keyword"-->
+            <!--android:inputType="text"-->
+            <!--android:onQueryTextSubmit="@{viewModel.onQueryTextSubmit}"-->
+            <!--/>-->
 
+        <!--<android.widget.SearchView-->
+            <!--android:id="@+id/edit_text"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:hint="Keyword"-->
+            <!--android:inputType="text"-->
+            <!--android:setOnQueryTextListener="@{viewModel.QueryTextListener}"-->
+            <!--/>-->
 
         <EditText
             android:id="@+id/edit_text"
@@ -25,6 +43,7 @@
             android:layout_alignParentTop="true"
             android:hint="Keyword"
             android:inputType="text"
+            android:onKey="@{viewModel.setOnKeyListener}"
             />
 
         <android.support.v7.widget.RecyclerView
@@ -38,7 +57,7 @@
         <Button
             android:id="@+id/buttonLap"
             android:text="Debug Button"
-            android:onClick="@{viewModel.onClick}"
+            android:onClick="@{viewModel::onClick}"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

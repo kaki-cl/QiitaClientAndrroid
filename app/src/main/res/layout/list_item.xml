@@ -4,7 +4,7 @@
     <data>
         <variable
             name="itemViewModel"
-            type="com.example.atuski.qiitaqlient.viewmodel.ItemViewModel" />
+            type="com.example.atuski.qiitaqlient.ui.qiitalist.ItemViewModel" />
 
     </data>
 

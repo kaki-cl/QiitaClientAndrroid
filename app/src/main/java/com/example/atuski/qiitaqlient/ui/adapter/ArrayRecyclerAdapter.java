@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.views.adapter;
+package com.example.atuski.qiitaqlient.ui.adapter;
 
 
 import android.content.Context;
@@ -55,27 +55,5 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
 
         Log.v("ArrayRecyclerAdapter", "getItem");
         return list.get(position);
-    }
-
-    @UiThread
-    public void addAllWithNotify(Collection<T> items) {
-
-        Log.v("ArrayRecyclerAdapter", "addAllWithNotify");
-        int position = getItemCount();
-        addAll(items);
-        notifyItemInserted(position);
-    }
-
-    @Override
-    public int getItemCount() {
-
-        Log.v("ArrayRecyclerAdapter", "getItemCount");
-        return list.size();
-    }
-
-    public Context getContext() {
-
-        Log.v("ArrayRecyclerAdapter", "getContext");
-        return context;
     }
 }
