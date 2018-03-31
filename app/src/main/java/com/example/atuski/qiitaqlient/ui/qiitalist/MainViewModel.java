@@ -14,12 +14,9 @@ import android.widget.EditText;
 
 import com.annimon.stream.Stream;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
-import com.example.atuski.qiitaqlient.model.OrmaDatabase;
 import com.example.atuski.qiitaqlient.model.Repo;
-import com.example.atuski.qiitaqlient.model.Repo_Selector;
 import com.example.atuski.qiitaqlient.model.User;
 import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
-import com.github.gfx.android.orma.Inserter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -108,28 +105,29 @@ public class MainViewModel {
 
                             @Override
                             public void onNext(List<Repo> result) {
-                            Log.v("MainViewModel", "004");
+                                Log.v("MainViewModel", "004");
 
-                            List<Repo> repoList = new ArrayList<>();
-                            for (Repo r : result) {
-                                Repo repo = new Repo();
-                                User user = new User();
-//                                user.setProfile_image_url(r.getUser().profile_image_url);
-//                                repo.setUser(user);
-//                                repo.setId(r.id);
-                                repo.setTitle(r.title);
-                                repo.setUrl(r.url);
-                                repoList.add(repo);
+                                List<Repo> repoList = new ArrayList<>();
+                                for (Repo r : result) {
+                                    Repo repo = new Repo();
+//                                    User user = new User();
+    //                                user.setProfile_image_url(r.getUser().profile_image_url);
+    //                                repo.setUser(user);
+    //                                repo.setId(r.id);
+                                    repo.setTitle(r.title);
+                                    repo.setUrl(r.url);
+                                    repoList.add(repo);
 
-                                Log.d("search debug", r.title);
-                                Log.d("search debug", r.url);
-                                ///  https://qiita.com//api/v2/items/?query=dargon
-                            }
+                                    Log.d("search debug", r.user.getProfile_image_url());
 
-                            // todo
-                            //StreamはJava8のAPIの方じゃだめ？
-                            itemResults.onNext(Stream.of(repoList).map(repo -> new ItemViewModel(new ObservableField<>(repo))).toList());
+                                    Log.d("search debug", r.title);
+                                    Log.d("search debug", r.url);
+                                    ///  https://qiita.com//api/v2/items/?query=dargon
+                                }
 
+                                // todo
+                                //StreamはJava8のAPIの方じゃだめ？
+                                itemResults.onNext(Stream.of(repoList).map(repo -> new ItemViewModel(new ObservableField<>(repo))).toList());
                             }
 
                             @Override
@@ -137,7 +135,6 @@ public class MainViewModel {
                                 Log.v("MainViewModel", e.getMessage());
                                 Log.v("MainViewModel", e.getLocalizedMessage());
                                 e.printStackTrace();
-
                             }
 
                             @Override

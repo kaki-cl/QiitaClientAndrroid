@@ -83,14 +83,5 @@ dependencies {
     compile 'com.github.gfx.android.orma:orma:4.2.3'
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.3'
 
-    // DBFlow
-//    def dbflow_version = "4.2.4"
-//    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}" // required for Java
-//    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-//    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
-//    compile "com.github.Raizlabs.DBFlow:dbflow-rx2:${dbflow_version}"// RXJava 2 support
-
-
-
     compile 'org.projectlombok:lombok:1.16.20'
 }

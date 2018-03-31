@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
+import com.github.gfx.android.orma.annotation.StaticTypeAdapter;
 import com.github.gfx.android.orma.annotation.Table;
 import com.google.gson.annotations.Expose;
 
@@ -49,6 +50,7 @@ public class Repo {
     @Column(indexed = true)
     public long queryId;
 
+    @Column
     @Expose
     public User user;
 

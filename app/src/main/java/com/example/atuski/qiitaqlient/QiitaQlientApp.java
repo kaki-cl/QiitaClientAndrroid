@@ -2,12 +2,7 @@ package com.example.atuski.qiitaqlient;
 
 import android.app.Application;
 
-import com.example.atuski.qiitaqlient.model.OrmaDatabase;
 import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
-
-/**
- * Created by atuski on 2018/03/27.
- */
 
 public class QiitaQlientApp extends Application {
 
@@ -16,7 +11,6 @@ public class QiitaQlientApp extends Application {
     public static QiitaQlientApp getInstance() {
         return app;
     }
-
 
     @Override
     public void onCreate() {

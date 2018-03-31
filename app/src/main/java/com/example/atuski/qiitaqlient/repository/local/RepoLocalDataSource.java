@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.repository;
+package com.example.atuski.qiitaqlient.repository.local;
 
 import android.content.Context;
 
@@ -24,6 +24,7 @@ public class RepoLocalDataSource {
     private RepoLocalDataSource(Context context) {
 
         ormaDatabase = OrmaDatabase.builder(context)
+                .name("test.db")
                 .writeOnMainThread(AccessThreadConstraint.NONE)
                 .build();
     }

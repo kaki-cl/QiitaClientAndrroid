@@ -1,8 +1,10 @@
 package com.example.atuski.qiitaqlient.ui.qiitalist;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.databinding.ObservableList;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.atuski.qiitaqlient.R;
@@ -29,6 +31,7 @@ public class QiitaItemAdapter extends ObservableListRecyclerAdapter<ItemViewMode
 
         Log.v("QiitaItemAdapter", "onCreateViewHolder");
 
+
         // アイテム単位のレイアウトファイルのインフレート
         // viewHolderの生成
         return new BindingHolder<>(context, parent, R.layout.list_item);
@@ -39,6 +42,7 @@ public class QiitaItemAdapter extends ObservableListRecyclerAdapter<ItemViewMode
 
         //データを取得
         ItemViewModel itemViewModel = getItem(position);
+
 
         Log.v("QiitaItemAdapteronBindViewHolder", itemViewModel.repo.get().getTitle());
 
