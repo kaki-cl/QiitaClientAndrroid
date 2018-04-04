@@ -21,6 +21,7 @@ public class ItemViewModel {
     public ItemViewModel(ObservableField<Repo> repo) {
 
         this.repo = repo;
+        //todo 削除
         repo.get().getTitle();
     }
 

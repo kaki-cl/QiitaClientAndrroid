@@ -116,10 +116,10 @@ public class MainViewModel {
     //                                repo.setId(r.id);
                                     repo.setTitle(r.title);
                                     repo.setUrl(r.url);
+                                    repo.setUser(r.user);
                                     repoList.add(repo);
 
                                     Log.d("search debug", r.user.getProfile_image_url());
-
                                     Log.d("search debug", r.title);
                                     Log.d("search debug", r.url);
                                     ///  https://qiita.com//api/v2/items/?query=dargon

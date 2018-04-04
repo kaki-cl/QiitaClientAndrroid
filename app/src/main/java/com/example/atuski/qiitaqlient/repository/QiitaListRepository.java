@@ -3,7 +3,8 @@ package com.example.atuski.qiitaqlient.repository;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.atuski.qiitaqlient.api.QiitaService;
+import com.example.atuski.qiitaqlient.repository.api.QiitaService;
+
 import com.example.atuski.qiitaqlient.model.Repo;
 import com.example.atuski.qiitaqlient.repository.local.RepoLocalDataSource;
 import com.google.gson.FieldNamingPolicy;
