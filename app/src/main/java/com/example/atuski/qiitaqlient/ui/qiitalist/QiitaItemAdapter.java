@@ -1,17 +1,18 @@
 package com.example.atuski.qiitaqlient.ui.qiitalist;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
+import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.ListItemBinding;
+import com.example.atuski.qiitaqlient.model.User;
 import com.example.atuski.qiitaqlient.ui.adapter.BindingHolder;
 import com.example.atuski.qiitaqlient.ui.adapter.ObservableListRecyclerAdapter;
-import com.example.atuski.qiitaqlient.ui.qiitalist.ItemViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class QiitaItemAdapter extends ObservableListRecyclerAdapter<ItemViewMode
 
         Log.v("QiitaItemAdapter", "onCreateViewHolder");
 
-
         // アイテム単位のレイアウトファイルのインフレート
         // viewHolderの生成
         return new BindingHolder<>(context, parent, R.layout.list_item);
@@ -40,13 +40,12 @@ public class QiitaItemAdapter extends ObservableListRecyclerAdapter<ItemViewMode
     @Override
     public void onBindViewHolder(BindingHolder<ListItemBinding> holder, int position) {
 
-        //データを取得
+        // データを取得
         ItemViewModel itemViewModel = getItem(position);
-
 
         Log.v("QiitaItemAdapteronBindViewHolder", itemViewModel.repo.get().getTitle());
 
-        //データを設定
+        // データを設定
         ListItemBinding binding = holder.binding;
         binding.setItemViewModel(itemViewModel);
     }
@@ -57,5 +56,10 @@ public class QiitaItemAdapter extends ObservableListRecyclerAdapter<ItemViewMode
         Log.v("QiitaItemAdaptergetItemCount", String.valueOf(list.size()));
 
         return list.size();
+    }
+
+    @BindingAdapter("android:imageUrl")
+    public static void setImage(ImageView imageView, User user) {
+        Picasso.get().load(user.getProfile_image_url()).into(imageView);
     }
 }

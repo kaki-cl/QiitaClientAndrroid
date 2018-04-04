@@ -15,27 +15,6 @@
         android:layout_height="match_parent"
         tools:context="com.example.atuski.qiitaqlient.MainActivity">
 
-
-        <!--<android.widget.SearchView-->
-            <!--android:id="@+id/edit_text"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:hint="Keyword"-->
-            <!--android:inputType="text"-->
-            <!--android:onQueryTextSubmit="@{viewModel.onQueryTextSubmit}"-->
-            <!--/>-->
-
-        <!--<android.widget.SearchView-->
-            <!--android:id="@+id/edit_text"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:hint="Keyword"-->
-            <!--android:inputType="text"-->
-            <!--android:setOnQueryTextListener="@{viewModel.QueryTextListener}"-->
-            <!--/>-->
-
         <EditText
             android:id="@+id/edit_text"
             android:layout_width="match_parent"
@@ -61,7 +40,6 @@
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
 
     </RelativeLayout>
 </layout>
