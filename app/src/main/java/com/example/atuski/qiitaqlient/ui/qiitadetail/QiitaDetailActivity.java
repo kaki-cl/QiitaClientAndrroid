@@ -1,19 +1,14 @@
-package com.example.atuski.qiitaqlient.ui.qiitalist;
+package com.example.atuski.qiitaqlient.ui.qiitadetail;
 
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.webkit.WebView;
 
 import com.example.atuski.qiitaqlient.R;
-
-/**
- * Created by atuski on 2018/03/30.
- */
+import com.example.atuski.qiitaqlient.ui.qiitalist.QiitaListActivity;
 
 public class QiitaDetailActivity extends AppCompatActivity {
 
@@ -26,8 +21,5 @@ public class QiitaDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         webView.loadUrl(intent.getStringExtra(QiitaListActivity.EXTRA_URL));
-
-        Log.v("QiitaDetailActivity", "test");
-        Log.v("QiitaDetailActivity", intent.getStringExtra(QiitaListActivity.EXTRA_URL));
     }
 }

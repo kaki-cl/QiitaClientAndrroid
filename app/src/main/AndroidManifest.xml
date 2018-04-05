@@ -21,7 +21,7 @@
         </activity>
 
         <activity
-            android:name=".ui.qiitalist.QiitaDetailActivity"
+            android:name=".ui.qiitadetail.QiitaDetailActivity"
             android:label="@string/app_name2">
         </activity>
     </application>

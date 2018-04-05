@@ -10,6 +10,7 @@ import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 
 import com.example.atuski.qiitaqlient.databinding.QiitaActivityListBinding;
+import com.example.atuski.qiitaqlient.ui.qiitadetail.QiitaDetailActivity;
 
 public class QiitaListActivity extends AppCompatActivity {
 
