@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.atuski.qiitaqlient"
         minSdkVersion 24
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        //todo なんだっけあとで調べる？
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath true
@@ -27,14 +26,10 @@ android {
         enabled = true
     }
 
-    // @link http://sys1yagi.hatenablog.com/entry/2014/12/16/104224
     dexOptions {
         javaMaxHeapSize "2g"
     }
-    /**
-     * https://github.com/ReactiveX/RxJava/issues/4445
-     *
-     */
+
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
@@ -42,31 +37,22 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    def supportLibraryVersion = "27.1.0"
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
+    compile "com.android.support:support-compat:$supportLibraryVersion"
+    compile "com.android.support:support-annotations:$supportLibraryVersion"
 
-    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    compile "com.android.support:design:${supportLibraryVersion}"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
-
-    //todo なんだっけあとで調べる？
-//    compile 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
-//    compile 'com.android.support:design:' + rootProject.supportLibVersion
-//    compile 'com.android.support:support-v4:' + rootProject.supportLibVersion
-//    compile 'io.reactivex.rxjava2:rxandroid:' + rootProject + '2.0.1'
-
-//    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
-    def rxjava2_version = '2.0.1'
-    compile "io.reactivex.rxjava2:rxjava:$rxjava2_version"// 同じバージョンでやったほうがいい。
-    compile "io.reactivex.rxjava2:rxandroid:$rxjava2_version" // これがないとAndroidSchedulersクラスが使えない
+    def rxjava2_version = '2.0.2'
+    compile "io.reactivex.rxjava2:rxjava:$rxjava2_version"
+    compile "io.reactivex.rxjava2:rxandroid:$rxjava2_version"
 
     //todo 本当に使わないといけないのか後で精査
     compile 'com.annimon:stream:1.1.5'
@@ -76,14 +62,10 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
-    //todo update もういらないかも？
-    compile 'com.squareup.retrofit:converter-jackson:2.0.0-beta2'
-
-    // Android-Orma
     compile 'com.github.gfx.android.orma:orma:4.2.3'
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.3'
 
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    compile 'com.squareup.picasso:picasso:2.71828'
 
     compile 'org.projectlombok:lombok:1.16.20'
 }
