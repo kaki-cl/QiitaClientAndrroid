@@ -12,9 +12,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-/**
- * Created by atuski on 2018/03/28.
- */
 public class RepoLocalDataSource {
 
     private static RepoLocalDataSource sInstance;

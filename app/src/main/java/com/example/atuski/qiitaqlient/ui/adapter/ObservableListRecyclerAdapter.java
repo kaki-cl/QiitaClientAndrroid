@@ -1,18 +1,10 @@
 package com.example.atuski.qiitaqlient.ui.adapter;
 
-/**
- * Created by atuski on 2018/03/26.
- */
-
 import android.content.Context;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-
-/**
- * Created by e10dokup on 2017/05/05.
- */
 
 public abstract class ObservableListRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends ArrayRecyclerAdapter<T, VH> {
 

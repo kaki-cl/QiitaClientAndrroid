@@ -18,9 +18,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by atuski on 2018/03/27.
- */
 public class QiitaListRepository {
 
     //To avoid that Non Static field cannot be referenced from a static context

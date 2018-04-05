@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by e10dokup on 2017/05/05.
- */
-
 public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected final List<T> list;
@@ -28,8 +24,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     public ArrayRecyclerAdapter(Context context, @NonNull List<T> list) {
         this.list = list;
         this.context = context;
-        Log.v("ArrayRecyclerAdapter", "コンストラクタ");
-
     }
 
     @UiThread
@@ -40,20 +34,14 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     }
 
     public void clear() {
-
-        Log.v("ArrayRecyclerAdapter", "clear");
         list.clear();
     }
 
     public void addAll(Collection<T> items) {
-
-        Log.v("ArrayRecyclerAdapter", "addAll");
         list.addAll(items);
     }
 
     public T getItem(int position) {
-
-        Log.v("ArrayRecyclerAdapter", "getItem");
         return list.get(position);
     }
 }

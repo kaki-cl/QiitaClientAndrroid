@@ -6,10 +6,6 @@ import java.io.Serializable;
 
 import lombok.Data;
 
-/**
- * Created by atuski on 2018/03/24.
- */
-
 @Data
 public class User implements Serializable {
 
