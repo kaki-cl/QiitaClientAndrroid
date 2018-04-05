@@ -3,13 +3,22 @@ package com.example.atuski.qiitaqlient.ui.adapter;
 import android.content.Context;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-public abstract class ObservableListRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends ArrayRecyclerAdapter<T, VH> {
+import java.util.Collection;
+import java.util.List;
+
+public abstract class ObservableListRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+
+    protected final List<T> list;
+
+    final Context context;
 
     public ObservableListRecyclerAdapter(@NonNull Context context, @NonNull ObservableList<T> list) {
-        super(context, list);
+        this.list = list;
+        this.context = context;
 
         list.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<T>>() {
             @Override
@@ -44,4 +53,24 @@ public abstract class ObservableListRecyclerAdapter<T, VH extends RecyclerView.V
             }
         });
     }
+
+    @UiThread
+    public void reset(Collection<T> items) {
+        clear();
+        addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        list.clear();
+    }
+
+    public void addAll(Collection<T> items) {
+        list.addAll(items);
+    }
+
+    public T getItem(int position) {
+        return list.get(position);
+    }
+
 }
