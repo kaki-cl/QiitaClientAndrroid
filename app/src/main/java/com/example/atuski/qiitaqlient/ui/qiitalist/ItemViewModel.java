@@ -6,9 +6,6 @@ import android.view.View;
 
 import com.example.atuski.qiitaqlient.model.Repo;
 
-import java.util.Collections;
-import java.util.List;
-
 import io.reactivex.subjects.BehaviorSubject;
 
 

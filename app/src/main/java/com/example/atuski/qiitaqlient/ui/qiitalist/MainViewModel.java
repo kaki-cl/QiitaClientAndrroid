@@ -12,10 +12,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.annimon.stream.Stream;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.model.Repo;
-import com.example.atuski.qiitaqlient.model.User;
 import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
 
 import java.io.UnsupportedEncodingException;
@@ -23,6 +21,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -122,12 +121,14 @@ public class MainViewModel {
                                     Log.d("search debug", r.user.getProfile_image_url());
                                     Log.d("search debug", r.title);
                                     Log.d("search debug", r.url);
-                                    ///  https://qiita.com//api/v2/items/?query=dargon
                                 }
 
-                                // todo
-                                //StreamはJava8のAPIの方じゃだめ？
-                                itemResults.onNext(Stream.of(repoList).map(repo -> new ItemViewModel(new ObservableField<>(repo))).toList());
+                                itemResults.onNext(repoList
+                                        .stream()
+                                        .map(repo -> new ItemViewModel(new ObservableField<>(repo)))
+                                        .collect(Collectors.toList())
+                                );
+
                             }
 
                             @Override

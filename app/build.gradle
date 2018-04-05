@@ -54,9 +54,6 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:$rxjava2_version"
     compile "io.reactivex.rxjava2:rxandroid:$rxjava2_version"
 
-    //todo 本当に使わないといけないのか後で精査
-    compile 'com.annimon:stream:1.1.5'
-
     def retrofitVersion = '2.4.0'
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
