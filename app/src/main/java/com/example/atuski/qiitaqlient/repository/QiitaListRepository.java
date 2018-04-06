@@ -5,8 +5,8 @@ import android.util.Log;
 
 import com.example.atuski.qiitaqlient.repository.api.QiitaService;
 
-import com.example.atuski.qiitaqlient.model.Repo;
-import com.example.atuski.qiitaqlient.repository.local.RepoLocalDataSource;
+import com.example.atuski.qiitaqlient.model.Article;
+import com.example.atuski.qiitaqlient.repository.local.LocalDataSource;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,7 +27,7 @@ public class QiitaListRepository {
 
     private QiitaService qiitaService;
 
-    private RepoLocalDataSource repoLocalDataSource;
+    private LocalDataSource localDataSource;
 
     private QiitaListRepository(Context context) {
 
@@ -44,7 +44,7 @@ public class QiitaListRepository {
 
         this.qiitaService = retrofit.create(QiitaService.class);
 
-        repoLocalDataSource = RepoLocalDataSource.getInstance(context);
+        localDataSource = LocalDataSource.getInstance(context);
     }
 
     public static QiitaListRepository getInstance(Context context) {
@@ -55,16 +55,16 @@ public class QiitaListRepository {
         return sInstance;
     }
 
-    public Observable<List<Repo>> searchRepo(String query) {
+    public Observable<List<Article>> searchArticle(String query) {
 
-        if (repoLocalDataSource.isEmptyQuery(query)) {
+        if (localDataSource.isEmptyQuery(query)) {
             Log.v("Repository", "新しい検索クエリだった。");
 
-            long queryId = repoLocalDataSource.insertQuery(query);
+            long queryId = localDataSource.insertQuery(query);
 
-            return this.qiitaService.listRepos(query)
-                    .map((repoSearchResult) -> {
-                        for (Repo r : repoSearchResult) {
+            return this.qiitaService.getArticles(query)
+                    .map((articleSearchResult) -> {
+                        for (Article r : articleSearchResult) {
                             Log.v("Repository", "r.getUser().getProfile_image_url()");
                             Log.v("Repository", r.user.getProfile_image_url());
 
@@ -72,12 +72,12 @@ public class QiitaListRepository {
                         }
 
                         // 検索結果を保存
-                        repoLocalDataSource.insertRepos(repoSearchResult);
-                        return repoSearchResult;
+                        localDataSource.insertArticles(articleSearchResult);
+                        return articleSearchResult;
                     });
         }
 
         Log.v("Repository", "すでに検索されたクエリだった。");
-        return repoLocalDataSource.loadRepos(query);
+        return localDataSource.loadArticles(query);
     }
 }

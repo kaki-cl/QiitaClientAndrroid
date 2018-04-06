@@ -13,10 +13,8 @@ public class Query {
     @PrimaryKey(autoincrement = true)
     public int id;
 
-
     @Column(unique = true, indexed = true)
     public String query;
-
 
     public Query() {}
 }

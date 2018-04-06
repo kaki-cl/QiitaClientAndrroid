@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.atuski.qiitaqlient.model.OrmaDatabase;
 import com.example.atuski.qiitaqlient.model.Query;
-import com.example.atuski.qiitaqlient.model.Repo;
+import com.example.atuski.qiitaqlient.model.Article;
 import com.github.gfx.android.orma.AccessThreadConstraint;
 
 import java.util.List;
@@ -12,13 +12,13 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class RepoLocalDataSource {
+public class LocalDataSource {
 
-    private static RepoLocalDataSource sInstance;
+    private static LocalDataSource sInstance;
 
     private OrmaDatabase ormaDatabase;
 
-    private RepoLocalDataSource(Context context) {
+    private LocalDataSource(Context context) {
 
         ormaDatabase = OrmaDatabase.builder(context)
                 .name("test.db")
@@ -26,10 +26,10 @@ public class RepoLocalDataSource {
                 .build();
     }
 
-    public static RepoLocalDataSource getInstance(Context context) {
+    public static LocalDataSource getInstance(Context context) {
 
         if (sInstance == null) {
-            sInstance = new RepoLocalDataSource(context);
+            sInstance = new LocalDataSource(context);
         }
         return sInstance;
     }
@@ -41,19 +41,19 @@ public class RepoLocalDataSource {
         return ormaDatabase.relationOfQuery().queryEq(query).inserter().execute(queryModel);
     }
 
-    public void insertRepos(List<Repo> repoSearchResult) {
-        ormaDatabase.prepareInsertIntoRepo().executeAll(repoSearchResult);
+    public void insertArticles(List<Article> articleSearchResult) {
+        ormaDatabase.prepareInsertIntoArticle().executeAll(articleSearchResult);
     }
 
     public boolean isEmptyQuery(String query) {
         return ormaDatabase.relationOfQuery().queryEq(query).isEmpty();
     }
 
-    public Observable<List<Repo>> loadRepos(String query) {
+    public Observable<List<Article>> loadArticles(String query) {
 
         return BehaviorSubject.createDefault(
                 ormaDatabase
-                        .relationOfRepo()
+                        .relationOfArticle()
                         .queryIdEq(findQueryId(query))
                         .selector()
                         .toList()

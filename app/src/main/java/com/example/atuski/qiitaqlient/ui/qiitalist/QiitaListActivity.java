@@ -51,7 +51,7 @@ public class QiitaListActivity extends AppCompatActivity {
                 item.clickTimes.subscribe((clickTimes) -> {
                     if (0 < clickTimes) {
                         Intent intent = new Intent(getApplication(), QiitaDetailActivity.class);
-                        intent.putExtra(EXTRA_URL, item.repo.get().getUrl());
+                        intent.putExtra(EXTRA_URL, item.article.get().getUrl());
                         startActivity(intent);
                     }
                 });

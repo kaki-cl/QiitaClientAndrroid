@@ -43,7 +43,7 @@ public class QiitaItemAdapter extends ObservableListRecyclerAdapter<ItemViewMode
         // データを取得
         ItemViewModel itemViewModel = getItem(position);
 
-        Log.v("QiitaItemAdapteronBindViewHolder", itemViewModel.repo.get().getTitle());
+        Log.v("QiitaItemAdapteronBindViewHolder", itemViewModel.article.get().getTitle());
 
         // データを設定
         ListItemBinding binding = holder.binding;

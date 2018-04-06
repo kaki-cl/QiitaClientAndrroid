@@ -13,7 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
-import com.example.atuski.qiitaqlient.model.Repo;
+import com.example.atuski.qiitaqlient.model.Article;
 import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
 
 import java.io.UnsupportedEncodingException;
@@ -53,19 +53,19 @@ public class MainViewModel {
 //        Log.v("MainViewModel onClick", str);
 
 //Orma
-//        Repo repo = new Repo();
+//        Article repo = new Article();
 //        repo.title = "test_title";
 ////        repo.id = "testID";
 //        repo.url = "test url";
 //
 //        OrmaDatabase ormaDatabase = QiitaListRepository.getOrmaDatabase();
-//        Inserter<Repo> inserter = ormaDatabase.prepareInsertIntoRepo();
+//        Inserter<Article> inserter = ormaDatabase.prepareInsertIntoRepo();
 //        inserter.execute(repo);
 //        inserter.execute(repo);
 //
 //        Repo_Selector selector = ormaDatabase.selectFromRepo();
 
-//        for (Repo r : selector) {
+//        for (Article r : selector) {
 //            Log.v("test DBFlow Title", r.getTitle());
 //            Log.v("test DBFlow Id", String.valueOf(r.getId()));
 //        }
@@ -97,35 +97,35 @@ public class MainViewModel {
                     return true;
                 }
 
-                repository.searchRepo(text)
+                repository.searchArticle(text)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<Repo>>() {
+                        .subscribe(new Observer<List<Article>>() {
 
                             @Override
-                            public void onNext(List<Repo> result) {
+                            public void onNext(List<Article> result) {
                                 Log.v("MainViewModel", "004");
 
-                                List<Repo> repoList = new ArrayList<>();
-                                for (Repo r : result) {
-                                    Repo repo = new Repo();
+                                List<Article> articleList = new ArrayList<>();
+                                for (Article r : result) {
+                                    Article article = new Article();
 //                                    User user = new User();
-    //                                user.setProfile_image_url(r.getUser().profile_image_url);
-    //                                repo.setUser(user);
-    //                                repo.setId(r.id);
-                                    repo.setTitle(r.title);
-                                    repo.setUrl(r.url);
-                                    repo.setUser(r.user);
-                                    repoList.add(repo);
+//                                user.setProfile_image_url(r.getUser().profile_image_url);
+//                                article.setUser(user);
+//                                article.setId(r.id);
+                                    article.setTitle(r.title);
+                                    article.setUrl(r.url);
+                                    article.setUser(r.user);
+                                    articleList.add(article);
 
                                     Log.d("search debug", r.user.getProfile_image_url());
                                     Log.d("search debug", r.title);
                                     Log.d("search debug", r.url);
                                 }
 
-                                itemResults.onNext(repoList
+                                itemResults.onNext(articleList
                                         .stream()
-                                        .map(repo -> new ItemViewModel(new ObservableField<>(repo)))
+                                        .map(article -> new ItemViewModel(new ObservableField<>(article)))
                                         .collect(Collectors.toList())
                                 );
 

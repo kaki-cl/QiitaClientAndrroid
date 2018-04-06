@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Table
-public class Repo {
+public class Article {
 
     @PrimaryKey(autoincrement = true)
     public int id;
@@ -29,7 +29,7 @@ public class Repo {
     @Expose
     public User user;
 
-    public Repo() {
+    public Article() {
 
     }
 }
