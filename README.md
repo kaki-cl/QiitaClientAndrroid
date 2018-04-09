@@ -17,9 +17,10 @@
 ## その他
 - 一度検索したキーワードは1時間以内であれば、端末のSQLiteに保存された検索結果を表示します。
 
-## 設計
-MVVMにて実装を行いました。
-Comming Soon
+## Architecture 
+![untitled 1 3](https://user-images.githubusercontent.com/23579885/38497797-35f4fb3a-3c3d-11e8-8164-8a7613bba70a.png)
+
+
 
 ## Library
 - RxJava 2.0.2
