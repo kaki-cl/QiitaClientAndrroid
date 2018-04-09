@@ -1,0 +1,38 @@
+package com.example.atuski.qiitaqlient.ui.qiitalist.drawer;
+
+import android.app.Activity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+
+/**
+ * Created by atuski on 2018/04/06.
+ */
+
+public class ActionbarDrawerToggleLister extends ActionBarDrawerToggle {
+
+    private final Activity activity;
+
+    public ActionbarDrawerToggleLister(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
+        super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);
+
+        this.activity = activity;
+    }
+
+    public void onDrawerClosed(View view) {
+
+        Log.v("MainActivity", "002");
+        Log.v("MainActivity", "onDrawerClosed");
+        activity.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+    }
+
+    public void onDrawerOpened(View drawerView) {
+
+        Log.v("MainActivity", "002");
+        Log.v("MainActivity", "onDrawerOpened");
+        activity.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+    }
+
+}

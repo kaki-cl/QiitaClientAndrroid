@@ -4,21 +4,30 @@ import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
+import com.example.atuski.qiitaqlient.R;
+import com.example.atuski.qiitaqlient.databinding.QiitaActivityListBinding;
 import com.example.atuski.qiitaqlient.model.Article;
 import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,42 +49,55 @@ public class MainViewModel {
     protected ObservableList<ItemViewModel> itemViewModels;
     final BehaviorSubject<List<ItemViewModel>> itemResults = BehaviorSubject.createDefault(Collections.emptyList());
 
+    public final ObservableArrayList<String> searchHistory = new ObservableArrayList<>();
+
     public MainViewModel(AppCompatActivity appCompatActivity, Context context) {
 
         this.appCompatActivity = appCompatActivity;
         this.context = context;
         this.repository = QiitaQlientApp.getInstance().getRepository();
         this.itemViewModels = new ObservableArrayList<>();
+
+        // 直近の検索履歴から参照
+        searchHistory.addAll(repository.loadLatestSearchQuery());
     }
 
-    public void onClick(View view) {
-//        String str = this.itemViewModels.get(0).repo.get().getTitle();
-//        Log.v("MainViewModel onClick", str);
+    /**
+     * メニュー選択イベント
+     *
+     * @param drawerToggle
+     * @param item
+     * @return
+     */
+    public boolean onOptionsItemSelected(ActionBarDrawerToggle drawerToggle, MenuItem item) {
 
-//Orma
-//        Article repo = new Article();
-//        repo.title = "test_title";
-////        repo.id = "testID";
-//        repo.url = "test url";
-//
-//        OrmaDatabase ormaDatabase = QiitaListRepository.getOrmaDatabase();
-//        Inserter<Article> inserter = ormaDatabase.prepareInsertIntoRepo();
-//        inserter.execute(repo);
-//        inserter.execute(repo);
-//
-//        Repo_Selector selector = ormaDatabase.selectFromRepo();
-
-//        for (Article r : selector) {
-//            Log.v("test DBFlow Title", r.getTitle());
-//            Log.v("test DBFlow Id", String.valueOf(r.getId()));
-//        }
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return false;
     }
 
+    /**
+     * ドロワーアイテムのクリックイベント処理の中身
+     * @param binding
+     */
+    public void onClickedDrawerItem(QiitaActivityListBinding binding, String query) {
+
+        EditText editText = appCompatActivity.findViewById(R.id.edit_text);
+        editText.setText(query);
+        editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
+        binding.drawerLayout.closeDrawer(binding.searchHistoryDrawer);
+    }
+
+    /**
+     * 検索イベント処理
+     */
     public View.OnKeyListener setOnKeyListener() {
         return new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
 
+                Log.v("ここまできてる？", "ここまできてる？");
                 if (keyCode != keyEvent.KEYCODE_ENTER || keyEvent.getAction() != KeyEvent.ACTION_UP) {
                     return false;
                 }
@@ -109,10 +131,6 @@ public class MainViewModel {
                                 List<Article> articleList = new ArrayList<>();
                                 for (Article r : result) {
                                     Article article = new Article();
-//                                    User user = new User();
-//                                user.setProfile_image_url(r.getUser().profile_image_url);
-//                                article.setUser(user);
-//                                article.setId(r.id);
                                     article.setTitle(r.title);
                                     article.setUrl(r.url);
                                     article.setUser(r.user);
@@ -133,8 +151,6 @@ public class MainViewModel {
 
                             @Override
                             public void onError(Throwable e) {
-                                Log.v("MainViewModel", e.getMessage());
-                                Log.v("MainViewModel", e.getLocalizedMessage());
                                 e.printStackTrace();
                             }
 
@@ -145,7 +161,8 @@ public class MainViewModel {
                             public void onComplete() {}
                         });
 
-
+                searchHistory.clear();
+                searchHistory.addAll(repository.loadLatestSearchQuery());
                 return true;
             }
         };

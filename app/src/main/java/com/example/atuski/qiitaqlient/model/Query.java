@@ -4,6 +4,8 @@ import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
 import com.github.gfx.android.orma.annotation.Table;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -15,6 +17,9 @@ public class Query {
 
     @Column(unique = true, indexed = true)
     public String query;
+
+    @Column(indexed = true)
+    public Date updatedAt;
 
     public Query() {}
 }

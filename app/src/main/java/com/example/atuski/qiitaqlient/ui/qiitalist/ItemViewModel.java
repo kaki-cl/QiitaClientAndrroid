@@ -16,7 +16,6 @@ public class ItemViewModel {
     final BehaviorSubject<Integer> clickTimes = BehaviorSubject.createDefault(0);
 
     public ItemViewModel(ObservableField<Article> article) {
-
         this.article = article;
     }
 
