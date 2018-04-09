@@ -11,7 +11,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -19,11 +18,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-//todo QiitaBrowserRepositoryに改名
-public class QiitaListRepository {
+public class QiitaBrowseRepository {
 
     //To avoid that Non Static field cannot be referenced from a static context
-    private static QiitaListRepository sInstance;
+    private static QiitaBrowseRepository sInstance;
 
     private Retrofit retrofit;
 
@@ -31,7 +29,7 @@ public class QiitaListRepository {
 
     private LocalDataSource localDataSource;
 
-    private QiitaListRepository(Context context) {
+    private QiitaBrowseRepository(Context context) {
 
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -49,10 +47,10 @@ public class QiitaListRepository {
         localDataSource = LocalDataSource.getInstance(context);
     }
 
-    public static QiitaListRepository getInstance(Context context) {
+    public static QiitaBrowseRepository getInstance(Context context) {
 
         if (sInstance == null) {
-            sInstance = new QiitaListRepository(context);
+            sInstance = new QiitaBrowseRepository(context);
         }
         return sInstance;
     }

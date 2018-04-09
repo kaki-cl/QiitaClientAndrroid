@@ -4,9 +4,6 @@ import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -16,18 +13,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.QiitaActivityListBinding;
 import com.example.atuski.qiitaqlient.model.Article;
-import com.example.atuski.qiitaqlient.repository.QiitaListRepository;
+import com.example.atuski.qiitaqlient.repository.QiitaBrowseRepository;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +38,7 @@ public class MainViewModel {
 
     private AppCompatActivity appCompatActivity;
     private Context context;
-    private QiitaListRepository repository;
+    private QiitaBrowseRepository repository;
 
     //todo ObservableListとitemViewModelsの必要性をまとめないと。
     protected ObservableList<ItemViewModel> itemViewModels;

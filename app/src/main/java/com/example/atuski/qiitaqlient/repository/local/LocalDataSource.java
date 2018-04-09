@@ -94,7 +94,7 @@ public class LocalDataSource {
         return ormaDatabase
                 .selectFromQuery()
                 .orderByUpdatedAtDesc()
-                .limit(10)
+                .limit(20)
                 .toList()
                 .stream()
                 .map(query -> query.getQuery())
