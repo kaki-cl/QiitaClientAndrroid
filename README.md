@@ -21,8 +21,11 @@
 MVVMにて実装を行いました。
 Comming Soon
 
-## 使用したライブラリ
-Comming Soon
+## Library
+- RxJava 2.0.2
+- Retrofit 2.4.0
+- orma 4.2.3
+- picasso 2.71828
 
 ## Author
 
