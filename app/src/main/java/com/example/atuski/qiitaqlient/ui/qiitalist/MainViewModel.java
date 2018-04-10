@@ -99,7 +99,6 @@ public class MainViewModel {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
 
-                Log.v("ここまできてる？", "ここまできてる？");
                 if (keyCode != keyEvent.KEYCODE_ENTER || keyEvent.getAction() != KeyEvent.ACTION_UP) {
                     return false;
                 }
@@ -117,7 +116,7 @@ public class MainViewModel {
                 try {
                     text = URLEncoder.encode(text, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
-                    Log.e("", e.toString());
+                    e.printStackTrace();
                     return true;
                 }
 
@@ -128,7 +127,6 @@ public class MainViewModel {
 
                             @Override
                             public void onNext(List<Article> result) {
-                                Log.v("MainViewModel", "004");
 
                                 List<Article> articleList = new ArrayList<>();
                                 for (Article r : result) {
@@ -137,10 +135,6 @@ public class MainViewModel {
                                     article.setUrl(r.url);
                                     article.setUser(r.user);
                                     articleList.add(article);
-
-                                    Log.d("search debug", r.user.getProfile_image_url());
-                                    Log.d("search debug", r.title);
-                                    Log.d("search debug", r.url);
                                 }
 
                                 itemResults.onNext(articleList

@@ -23,16 +23,12 @@ public class ActionbarDrawerToggleLister extends ActionBarDrawerToggle {
 
     public void onDrawerClosed(View view) {
 
-        Log.v("MainActivity", "002");
-        Log.v("MainActivity", "onDrawerClosed");
-        activity.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+        activity.invalidateOptionsMenu();
     }
 
     public void onDrawerOpened(View drawerView) {
 
-        Log.v("MainActivity", "002");
-        Log.v("MainActivity", "onDrawerOpened");
-        activity.invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+        activity.invalidateOptionsMenu();
     }
 
 }

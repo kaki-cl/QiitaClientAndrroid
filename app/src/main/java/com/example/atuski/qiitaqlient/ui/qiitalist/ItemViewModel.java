@@ -20,20 +20,14 @@ public class ItemViewModel {
     }
 
     public ObservableField<Article> getArticle() {
-        Log.v("ItemViewModel", "getRepo " + article.get().getTitle());
         return article;
     }
 
-    // todo 双方向バインドするときに使う？
-    // 今は viewModel -> View のOneWayでしか使ってない。
     public void setArticle(ObservableField<Article> article) {
-        Log.v("ItemViewModel", "setRepo");
         this.article = article;
     }
 
     public void onClick(View view) {
-        Log.v("ItemViewModel : onClick", "ttttttttt");
-        Log.v("ItemViewModel : onClick", article.get().getUrl());
         clickTimes.onNext(clickTimes.getValue() + 1);
     }
 }

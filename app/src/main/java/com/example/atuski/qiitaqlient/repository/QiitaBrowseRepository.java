@@ -65,8 +65,6 @@ public class QiitaBrowseRepository {
             return this.qiitaService.getArticles(query)
                     .map((articleSearchResult) -> {
                         for (Article r : articleSearchResult) {
-                            Log.v("Repository", "r.getUser().getProfile_image_url()");
-                            Log.v("Repository", r.user.getProfile_image_url());
 
                             r.setQueryId(queryId);
                         }
