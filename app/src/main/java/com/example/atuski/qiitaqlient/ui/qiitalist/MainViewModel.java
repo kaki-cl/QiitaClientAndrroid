@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -159,6 +160,10 @@ public class MainViewModel {
 
                 searchHistory.clear();
                 searchHistory.addAll(repository.loadLatestSearchQuery());
+
+                // 表示内容更新時に、一番上までスクロールする。
+                RecyclerView recyclerView = (RecyclerView) appCompatActivity.findViewById(R.id.qiita_list_activity);
+                recyclerView.scrollToPosition(0);
                 return true;
             }
         };
