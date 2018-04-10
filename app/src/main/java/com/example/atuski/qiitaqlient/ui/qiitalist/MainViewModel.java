@@ -86,6 +86,11 @@ public class MainViewModel {
         binding.drawerLayout.closeDrawer(binding.searchHistoryDrawer);
     }
 
+    public void resetDrawerItemsList() {
+        searchHistory.clear();
+        searchHistory.addAll(repository.loadLatestSearchQuery());
+    }
+
     /**
      * 検索イベント処理
      */
@@ -157,9 +162,6 @@ public class MainViewModel {
                             @Override
                             public void onComplete() {}
                         });
-
-                searchHistory.clear();
-                searchHistory.addAll(repository.loadLatestSearchQuery());
 
                 // 表示内容更新時に、一番上までスクロールする。
                 RecyclerView recyclerView = (RecyclerView) appCompatActivity.findViewById(R.id.qiita_list_activity);

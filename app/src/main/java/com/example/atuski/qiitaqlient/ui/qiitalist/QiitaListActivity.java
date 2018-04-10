@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -100,5 +101,14 @@ public class QiitaListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return mainViewModel.onOptionsItemSelected(mDrawerToggle, item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mainViewModel.resetDrawerItemsList();
+
+        // ドロワーメニュー表示時に、一番上のアイテムを選択する。
+        binding.searchHistoryDrawer.setItemChecked(0, true);
+        return super.onPrepareOptionsMenu(menu);
     }
 }
