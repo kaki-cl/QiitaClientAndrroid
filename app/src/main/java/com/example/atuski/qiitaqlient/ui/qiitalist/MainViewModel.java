@@ -81,6 +81,7 @@ public class MainViewModel {
         EditText editText = appCompatActivity.findViewById(R.id.edit_text);
         editText.setText(query);
         editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
+        editText.setSelection(query.length());
         binding.drawerLayout.closeDrawer(binding.searchHistoryDrawer);
     }
 

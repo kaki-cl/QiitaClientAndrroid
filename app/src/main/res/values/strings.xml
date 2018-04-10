@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QiitaQlient</string>
+    <string name="app_name">LightQiita</string>
     <string name="app_name2">QiitaArticle</string>
 
     <string name="drawer_open">Open navigation drawer</string>
