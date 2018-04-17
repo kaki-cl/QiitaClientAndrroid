@@ -1,12 +1,10 @@
-package com.example.atuski.qiitaqlient.repository.local;
+package com.example.atuski.qiitaqlient.repository.search;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.atuski.qiitaqlient.model.OrmaDatabase;
 import com.example.atuski.qiitaqlient.model.Query;
 import com.example.atuski.qiitaqlient.model.Article;
-import com.example.atuski.qiitaqlient.model.Query_Relation;
 import com.github.gfx.android.orma.AccessThreadConstraint;
 
 import java.util.Calendar;

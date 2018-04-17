@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.ui.adapter;
+package com.example.atuski.qiitaqlient.ui.util.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;

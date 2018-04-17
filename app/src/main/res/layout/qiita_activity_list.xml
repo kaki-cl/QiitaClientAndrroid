@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.atuski.qiitaqlient.ui.qiitalist.MainViewModel" />
+            type="com.example.atuski.qiitaqlient.ui.search.SearchViewModel" />
     </data>
 
     <android.support.v4.widget.DrawerLayout
@@ -15,50 +15,75 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            >
-        </android.support.v7.widget.Toolbar>
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/tool_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:minHeight="?attr/actionBarSize"-->
+            <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+            <!--&gt;-->
+        <!--</android.support.v7.widget.Toolbar>-->
         <!--android:background="?attr/colorPrimary"-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.example.atuski.qiitaqlient.MainActivity">
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--tools:context="com.example.atuski.qiitaqlient.MainActivity">-->
 
-            <EditText
-                android:id="@+id/edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:hint="Keyword"
-                android:inputType="text"
-                android:onKey="@{viewModel.setOnKeyListener}"
-                />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/qiita_list_activity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@id/edit_text"
-                tools:listitem="@layout/list_item"/>
-
-            <!--<Button-->
-                <!--android:id="@+id/buttonLap"-->
-                <!--android:text="Debug Button"-->
-                <!--android:onClick="@{viewModel::onClick}"-->
-                <!--android:layout_alignParentBottom="true"-->
+            <!--<com.viewpagerindicator.TitlePageIndicator-->
+                <!--android:id="@+id/indicator"-->
+                <!--android:padding="10dip"-->
                 <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
+                <!--android:layout_height="wrap_content"-->
+                <!--/>-->
 
-        </RelativeLayout>
+            <!--<android.support.v4.view.ViewPager-->
+                <!--android:id="@+id/pager"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1" />-->
 
-        <com.example.atuski.qiitaqlient.ui.qiitalist.DrawerBindingListView
+            <!--<EditText-->
+                <!--android:id="@+id/edit_text"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Keyword"-->
+                <!--android:inputType="text"-->
+                <!--android:layout_below="@id/indicator"-->
+                <!--android:onKey="@{viewModel.setOnKeyListener}"-->
+                <!--/>-->
+
+            <!--&lt;!&ndash;<EditText&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/edit_text"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="0dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:hint="Keyword"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:inputType="text"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_below="@id/indicator"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:onKey="@{viewModel.setOnKeyListener}"&ndash;&gt;-->
+                <!--&lt;!&ndash;/>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;android:layout_alignParentTop="true"&ndash;&gt;-->
+
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/qiita_list_activity"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_below="@id/edit_text"-->
+                <!--tools:listitem="@laysearch_list_itemitem"/>-->
+
+            <!--&lt;!&ndash;<Button&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/buttonLap"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="Debug Button"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:onClick="@{viewModel::onClick}"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentBottom="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+        <!--</RelativeLayout>-->
+
+        <com.example.atuski.qiitaqlient.ui.drawer.DrawerBindingListView
             android:id="@+id/search_history_drawer"
             android:layout_width="240dp"
             android:layout_height="match_parent"
@@ -67,8 +92,7 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
             android:background="#111"
-            app:list="@{viewModel.searchHistory}"
-            />
+            app:list="@{viewModel.searchHistory}" />
     </android.support.v4.widget.DrawerLayout>
 </layout>
 

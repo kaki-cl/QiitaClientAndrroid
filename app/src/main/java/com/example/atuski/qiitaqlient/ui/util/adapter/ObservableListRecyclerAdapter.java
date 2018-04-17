@@ -1,11 +1,10 @@
-package com.example.atuski.qiitaqlient.ui.adapter;
+package com.example.atuski.qiitaqlient.ui.util.adapter;
 
 import android.content.Context;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.Collection;
 import java.util.List;

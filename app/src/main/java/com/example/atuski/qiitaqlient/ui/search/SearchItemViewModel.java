@@ -1,7 +1,6 @@
-package com.example.atuski.qiitaqlient.ui.qiitalist;
+package com.example.atuski.qiitaqlient.ui.search;
 
 import android.databinding.ObservableField;
-import android.util.Log;
 import android.view.View;
 
 import com.example.atuski.qiitaqlient.model.Article;
@@ -9,13 +8,13 @@ import com.example.atuski.qiitaqlient.model.Article;
 import io.reactivex.subjects.BehaviorSubject;
 
 
-public class ItemViewModel {
+public class SearchItemViewModel {
 
     public ObservableField<Article> article;
 
     final BehaviorSubject<Integer> clickTimes = BehaviorSubject.createDefault(0);
 
-    public ItemViewModel(ObservableField<Article> article) {
+    public SearchItemViewModel(ObservableField<Article> article) {
         this.article = article;
     }
 

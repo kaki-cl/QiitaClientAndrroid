@@ -2,7 +2,8 @@ package com.example.atuski.qiitaqlient;
 
 import android.app.Application;
 
-import com.example.atuski.qiitaqlient.repository.QiitaBrowseRepository;
+import com.example.atuski.qiitaqlient.repository.search.SearchRepository;
+import com.example.atuski.qiitaqlient.repository.trend.TrendRepository;
 
 public class QiitaQlientApp extends Application {
 
@@ -19,7 +20,11 @@ public class QiitaQlientApp extends Application {
         this.app = this;
     }
 
-    public QiitaBrowseRepository getRepository() {
-        return QiitaBrowseRepository.getInstance(getApplicationContext());
+    public SearchRepository getSearchRepository() {
+        return SearchRepository.getInstance(getApplicationContext());
+    }
+
+    public TrendRepository getTrendRepository() {
+        return TrendRepository.getInstance();
     }
 }

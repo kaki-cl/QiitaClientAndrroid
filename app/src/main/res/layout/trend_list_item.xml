@@ -3,8 +3,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="itemViewModel"
-            type="com.example.atuski.qiitaqlient.ui.qiitalist.ItemViewModel" />
+            name="searchItemViewModel"
+            type="com.example.atuski.qiitaqlient.ui.trend.TrendItemViewModel" />
     </data>
 
     <FrameLayout xmlns:tools="http://schemas.android.com/tools"
@@ -22,7 +22,7 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="TODO"
-                android:imageUrl="@{itemViewModel.article.user}"
+                android:imageUrl="@{searchItemViewModel.article.user}"
                 />
 
             <LinearLayout
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:text="@{itemViewModel.article.title}"
+                    android:text="@{searchItemViewModel.article.title}"
                     android:textSize="20sp"
                     tools:text="trackkkkkkkkkkkkkkkkkkkkkkk" />
 
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:text="@{itemViewModel.article.url}"
+                    android:text="@{searchItemViewModel.article.url}"
                     tools:text="artisttttttttttttttttttttttt" />
 
             </LinearLayout>
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:background="@null"
-            android:onClick="@{itemViewModel::onClick}"
+            android:onClick="@{searchItemViewModel::onClick}"
             />
     </FrameLayout>
 

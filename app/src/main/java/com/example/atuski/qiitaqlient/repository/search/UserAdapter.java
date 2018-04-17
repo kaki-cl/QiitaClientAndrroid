@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.repository.local;
+package com.example.atuski.qiitaqlient.repository.search;
 
 import com.example.atuski.qiitaqlient.model.User;
 import com.github.gfx.android.orma.annotation.StaticTypeAdapter;

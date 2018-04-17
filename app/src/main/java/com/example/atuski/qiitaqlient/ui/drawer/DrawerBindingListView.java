@@ -1,8 +1,7 @@
-package com.example.atuski.qiitaqlient.ui.qiitalist;
+package com.example.atuski.qiitaqlient.ui.drawer;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 

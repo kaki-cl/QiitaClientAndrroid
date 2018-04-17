@@ -1,12 +1,12 @@
-package com.example.atuski.qiitaqlient.ui.qiitalist;
+package com.example.atuski.qiitaqlient.ui.search;
+
 
 import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,8 +18,9 @@ import android.widget.EditText;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.QiitaActivityListBinding;
+import com.example.atuski.qiitaqlient.databinding.SearchFragmentBinding;
 import com.example.atuski.qiitaqlient.model.Article;
-import com.example.atuski.qiitaqlient.repository.QiitaBrowseRepository;
+import com.example.atuski.qiitaqlient.repository.search.SearchRepository;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -35,27 +36,27 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 
-public class MainViewModel {
+public class SearchViewModel {
 
-    private AppCompatActivity appCompatActivity;
+    private Fragment appCompatActivity;
     private Context context;
-    private QiitaBrowseRepository repository;
+    private SearchRepository repository;
 
     //todo ObservableListとitemViewModelsの必要性をまとめないと。
-    protected ObservableList<ItemViewModel> itemViewModels;
-    final BehaviorSubject<List<ItemViewModel>> itemResults = BehaviorSubject.createDefault(Collections.emptyList());
+    protected ObservableList<SearchItemViewModel> searchItemViewModels;
+    final BehaviorSubject<List<SearchItemViewModel>> itemResults = BehaviorSubject.createDefault(Collections.emptyList());
 
     public final ObservableArrayList<String> searchHistory = new ObservableArrayList<>();
 
-    public MainViewModel(AppCompatActivity appCompatActivity, Context context) {
+    public SearchViewModel(Fragment appCompatActivity, Context context) {
 
         this.appCompatActivity = appCompatActivity;
         this.context = context;
-        this.repository = QiitaQlientApp.getInstance().getRepository();
-        this.itemViewModels = new ObservableArrayList<>();
+        this.repository = QiitaQlientApp.getInstance().getSearchRepository();
+        this.searchItemViewModels = new ObservableArrayList<>();
 
         // 直近の検索履歴から参照
-        searchHistory.addAll(repository.loadLatestSearchQuery());
+//        searchHistory.addAll(repository.loadLatestSearchQuery());
     }
 
     /**
@@ -79,7 +80,8 @@ public class MainViewModel {
      */
     public void onClickedDrawerItem(QiitaActivityListBinding binding, String query) {
 
-        EditText editText = appCompatActivity.findViewById(R.id.edit_text);
+//        EditText editText = context.findViewById(R.id.edit_text);
+        EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
         editText.setText(query);
         editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
         editText.setSelection(query.length());
@@ -91,6 +93,13 @@ public class MainViewModel {
         searchHistory.addAll(repository.loadLatestSearchQuery());
     }
 
+    public void test(SearchFragmentBinding binding) {
+        EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
+        editText.setText("java");
+        Log.v("SearchViewModel", String.valueOf(editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))));
+
+    }
+
     /**
      * 検索イベント処理
      */
@@ -99,12 +108,15 @@ public class MainViewModel {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
 
+                Log.v("ここまできてる？", "ここまできてる？");
+
                 if (keyCode != keyEvent.KEYCODE_ENTER || keyEvent.getAction() != KeyEvent.ACTION_UP) {
                     return false;
                 }
 
                 EditText editText = (EditText) view;
-                InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(context.INPUT_METHOD_SERVICE);
+//                InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
                 String text = editText.getText().toString();
@@ -139,7 +151,7 @@ public class MainViewModel {
 
                                 itemResults.onNext(articleList
                                         .stream()
-                                        .map(article -> new ItemViewModel(new ObservableField<>(article)))
+                                        .map(article -> new SearchItemViewModel(new ObservableField<>(article)))
                                         .collect(Collectors.toList())
                                 );
 
@@ -158,8 +170,8 @@ public class MainViewModel {
                         });
 
                 // 表示内容更新時に、一番上までスクロールする。
-                RecyclerView recyclerView = (RecyclerView) appCompatActivity.findViewById(R.id.qiita_list_activity);
-                recyclerView.scrollToPosition(0);
+//                RecyclerView recyclerView = (RecyclerView) appCompatActivity.findViewById(R.id.qiita_list_activity);
+//                recyclerView.scrollToPosition(0);
                 return true;
             }
         };

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="viewModel"
+            type="com.example.atuski.qiitaqlient.ui.trend.TrendViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/trend_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Keyword"
+            android:inputType="text"
+            android:onKey="@{viewModel.setOnKeyListener}">
+        </EditText>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trend_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/trend_edit_text"
+            tools:listitem="@layout/trend_list_item"/>
+
+    </RelativeLayout>
+</layout>
+

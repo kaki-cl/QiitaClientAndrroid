@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.ui.qiitadetail;
+package com.example.atuski.qiitaqlient.ui.detail;
 
 
 import android.content.Intent;
@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
 import com.example.atuski.qiitaqlient.R;
-import com.example.atuski.qiitaqlient.ui.qiitalist.QiitaListActivity;
+import com.example.atuski.qiitaqlient.ui.search.QiitaListActivity;
 
-public class QiitaDetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
