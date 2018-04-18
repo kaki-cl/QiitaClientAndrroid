@@ -1,14 +1,13 @@
 package com.example.atuski.qiitaqlient.ui.detail;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
+import com.example.atuski.qiitaqlient.MainActivity;
 import com.example.atuski.qiitaqlient.R;
-import com.example.atuski.qiitaqlient.ui.search.QiitaListActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -20,6 +19,6 @@ public class DetailActivity extends AppCompatActivity {
         WebView webView = (WebView) findViewById(R.id.web_view);
 
         Intent intent = getIntent();
-        webView.loadUrl(intent.getStringExtra(QiitaListActivity.EXTRA_URL));
+        webView.loadUrl(intent.getStringExtra(MainActivity.EXTRA_URL));
     }
 }

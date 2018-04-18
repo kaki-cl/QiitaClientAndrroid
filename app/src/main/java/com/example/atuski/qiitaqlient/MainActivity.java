@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import com.example.atuski.qiitaqlient.databinding.QiitaActivityListBinding;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryActivity;
 import com.example.atuski.qiitaqlient.ui.sub.SubFragment;
 import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
@@ -27,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_URL = "URL";
 
-    private QiitaActivityListBinding binding;
     private SearchViewModel searchViewModel;
     private ActionBarDrawerToggle mDrawerToggle;
 

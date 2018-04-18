@@ -17,7 +17,6 @@ import android.widget.EditText;
 
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
-import com.example.atuski.qiitaqlient.databinding.QiitaActivityListBinding;
 import com.example.atuski.qiitaqlient.databinding.SearchFragmentBinding;
 import com.example.atuski.qiitaqlient.model.Article;
 import com.example.atuski.qiitaqlient.repository.search.SearchRepository;
@@ -74,24 +73,6 @@ public class SearchViewModel {
         return false;
     }
 
-    /**
-     * ドロワーアイテムのクリックイベント処理の中身
-     * @param binding
-     */
-    public void onClickedDrawerItem(QiitaActivityListBinding binding, String query) {
-
-//        EditText editText = context.findViewById(R.id.edit_text);
-        EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
-        editText.setText(query);
-        editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
-        editText.setSelection(query.length());
-        binding.drawerLayout.closeDrawer(binding.searchHistoryDrawer);
-    }
-
-    public void resetDrawerItemsList() {
-        searchHistory.clear();
-        searchHistory.addAll(repository.loadLatestSearchQuery());
-    }
 
     /**
      * 検索イベント処理

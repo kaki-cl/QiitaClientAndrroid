@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.atuski.qiitaqlient.MainActivity;
 import com.example.atuski.qiitaqlient.R;
-import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
 
 public class SearchHistoryActivity extends AppCompatActivity {
 
@@ -46,8 +44,6 @@ public class SearchHistoryActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra(FROM_SEARCH_HISTORY, "Java");
                 startActivity(intent);
-
-//                finish();
             default:
                 break;
         }
