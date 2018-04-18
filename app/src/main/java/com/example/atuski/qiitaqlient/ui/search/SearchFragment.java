@@ -12,12 +12,15 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.SearchFragmentBinding;
 import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
+import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryActivity;
 
 public class SearchFragment extends Fragment {
 
@@ -27,7 +30,7 @@ public class SearchFragment extends Fragment {
     private SearchViewModel searchViewModel;
 
     public QiitaQlientApp app;
-
+    private String searchHistory;
 
     public SearchFragment() {}
 
@@ -42,25 +45,14 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.search_fragment, container, false);
         binding.setViewModel(searchViewModel);
 
         initRecyclerView();
+        initSearchHistoryContainer();
+
         return binding.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        //todo dispatchKeyEventが動かない。
-        EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
-        Log.v("SearchFragment", editText.getKeyListener().getClass().toString());
-        Log.v("SearchFragment", String.valueOf(editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))));
-        editText.setSelection(editText.getText().length());
-//        binding.editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
-//        binding.editText.setSelection(binding.editText.getText().toString().length());
-        Log.v("SearchFragment", binding.searchEditText.getText().toString());
     }
 
     private void initRecyclerView() {
@@ -90,6 +82,44 @@ public class SearchFragment extends Fragment {
             // アダプターへの検索結果の更新
             searchItemAdapter.clear();
             searchItemAdapter.addAll(itemList);
+        });
+    }
+
+    private void initSearchHistoryContainer() {
+
+        if (getArguments() != null) {
+            searchHistory = getArguments().getString(SearchHistoryActivity.FROM_SEARCH_HISTORY);
+            getArguments().putString(SearchHistoryActivity.FROM_SEARCH_HISTORY, null);
+        }
+
+        View view = binding.getRoot().findViewById(R.id.search_fragment_container);
+        view.getViewTreeObserver().addOnWindowFocusChangeListener(new ViewTreeObserver.OnWindowFocusChangeListener() {
+            @Override
+            public void onWindowFocusChanged(boolean hasFocus) {
+
+                Log.v("SearchFragment", "onWindowFocusChanged");
+
+                if (!hasFocus) {
+                    return;
+                }
+
+                EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
+                if (editText.getText().length() == 0 && searchHistory == null) {
+                    return;
+                }
+
+                if (searchHistory != null && searchHistory.length() != 0) {
+                    Log.v("SearchFragment", "second true");
+                    editText.setText(searchHistory);
+                    searchHistory = null;
+                }
+
+                editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
+                editText.setSelection(editText.getText().length());
+                //todo キーボードを閉じるようにする
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            }
         });
     }
 }

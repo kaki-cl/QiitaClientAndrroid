@@ -1,6 +1,8 @@
 package com.example.atuski.qiitaqlient;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -8,16 +10,18 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.example.atuski.qiitaqlient.databinding.QiitaActivityListBinding;
+import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryActivity;
 import com.example.atuski.qiitaqlient.ui.sub.SubFragment;
 import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
 import com.example.atuski.qiitaqlient.ui.search.SearchViewModel;
 import com.example.atuski.qiitaqlient.ui.trend.TrendFragment;
-
-/**
- * Created by atuski on 2018/04/17.
- */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,65 +44,41 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
+
+        Intent intent = getIntent();
+        String searchHistory = intent.getStringExtra(SearchHistoryActivity.FROM_SEARCH_HISTORY);
+        SearchFragment searchFragment = new SearchFragment();
+        if (searchHistory != null && searchHistory.length() != 0) {
+            Bundle bundle = new Bundle();
+            bundle.putString(SearchHistoryActivity.FROM_SEARCH_HISTORY, searchHistory);
+            searchFragment.setArguments(bundle);
+        }
+
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mPager = (ViewPager)findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewFragmentPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragments(new SearchFragment(), "Search");
+
+        viewPagerAdapter.addFragments(searchFragment, "Search");
         viewPagerAdapter.addFragments(new TrendFragment(), "Trend");
         viewPagerAdapter.addFragments(new SubFragment(), "Sub");
         mPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mPager);
-//        initDrawerView();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-//        EditText editText = (EditText) findViewById(R.id.edit_text);
-//        Log.v("SearchFragment", editText.getText().toString());
-        Log.v("MainActivity", "MainActivity");
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    //    private void initDrawerView() {
-//
-//        // アクションバーを表示
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//
-////        Bundle args = new Bundle();
-////        args.put("activity", this);
-//        DrawerMenuFragment drawerMenuFragment = new DrawerMenuFragment();
-////        drawerMenuFragment.setArguments(args);
-////
-//
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .add(R.id.activity_main, drawerMenuFragment)
-//                .commit();
-//    }
-
-//    @Override
-//    public void onDrawerClosed(View view) {
-//        invalidateOptionsMenu();
-//    }
-//
-//    @Override
-//    public void onDrawerOpened(View drawerView) {
-//        invalidateOptionsMenu();
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        return searchViewModel.onOptionsItemSelected(mDrawerToggle, item);
-//    }
-//
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        searchViewModel.resetDrawerItemsList();
-//
-//        // ドロワーメニュー表示時に、一番上のアイテムを選択する。
-//        binding.searchHistoryDrawer.setItemChecked(0, true);
-//        return super.onPrepareOptionsMenu(menu);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search_history:
+                Intent intent = new Intent(this, SearchHistoryActivity.class);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

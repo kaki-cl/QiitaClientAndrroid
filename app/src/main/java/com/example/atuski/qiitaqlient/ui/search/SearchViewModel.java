@@ -93,17 +93,13 @@ public class SearchViewModel {
         searchHistory.addAll(repository.loadLatestSearchQuery());
     }
 
-    public void test(SearchFragmentBinding binding) {
-        EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
-        editText.setText("java");
-        Log.v("SearchViewModel", String.valueOf(editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))));
-
-    }
-
     /**
      * 検索イベント処理
      */
     public View.OnKeyListener setOnKeyListener() {
+
+        Log.v("SearchViewModel", "setOnKeyListener init");
+
         return new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
