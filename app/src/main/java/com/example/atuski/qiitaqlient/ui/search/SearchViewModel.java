@@ -59,22 +59,6 @@ public class SearchViewModel {
     }
 
     /**
-     * メニュー選択イベント
-     *
-     * @param drawerToggle
-     * @param item
-     * @return
-     */
-    public boolean onOptionsItemSelected(ActionBarDrawerToggle drawerToggle, MenuItem item) {
-
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return false;
-    }
-
-
-    /**
      * 検索イベント処理
      */
     public View.OnKeyListener setOnKeyListener() {

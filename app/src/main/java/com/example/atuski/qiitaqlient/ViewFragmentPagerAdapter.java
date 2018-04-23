@@ -8,9 +8,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by atuski on 2018/04/13.
- */
 public class ViewFragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
     ArrayList<Fragment> fragments = new ArrayList<>();

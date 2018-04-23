@@ -2,65 +2,70 @@ package com.example.atuski.qiitaqlient;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.EditText;
 
-import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryActivity;
-import com.example.atuski.qiitaqlient.ui.sub.SubFragment;
-import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
-import com.example.atuski.qiitaqlient.ui.search.SearchViewModel;
-import com.example.atuski.qiitaqlient.ui.trend.TrendFragment;
+import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
+import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_URL = "URL";
 
-    private SearchViewModel searchViewModel;
-    private ActionBarDrawerToggle mDrawerToggle;
-
     public QiitaQlientApp app;
     private ViewFragmentPagerAdapter viewPagerAdapter;
-    private ViewPager mPager;
-    private TabLayout mTabLayout;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // レイアウトファイルからFragmentを呼び込むようにした。
         setContentView(R.layout.main_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
+        Log.v("MainActivity", "onCreate");
+
+        ToolbarFragment toolbarFragment = new ToolbarFragment();
+//        getFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.fragment_container, toolbarFragment)
+//                .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, toolbarFragment)
+                .commit();
 
 
-        Intent intent = getIntent();
-        String searchHistory = intent.getStringExtra(SearchHistoryActivity.FROM_SEARCH_HISTORY);
-        SearchFragment searchFragment = new SearchFragment();
-        if (searchHistory != null && searchHistory.length() != 0) {
-            Bundle bundle = new Bundle();
-            bundle.putString(SearchHistoryActivity.FROM_SEARCH_HISTORY, searchHistory);
-            searchFragment.setArguments(bundle);
-        }
-
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        mPager = (ViewPager)findViewById(R.id.viewPager);
-        viewPagerAdapter = new ViewFragmentPagerAdapter(getSupportFragmentManager());
-
-        viewPagerAdapter.addFragments(searchFragment, "Search");
-        viewPagerAdapter.addFragments(new TrendFragment(), "Trend");
-        viewPagerAdapter.addFragments(new SubFragment(), "Sub");
-        mPager.setAdapter(viewPagerAdapter);
-        mTabLayout.setupWithViewPager(mPager);
+        // SearchHistory用の処理
+        // todo ViewPagerの処理を他に譲渡するかどうか
+        /**
+         * ViewPagerFragmentを作って、
+         *   そっちにBundle経由で渡すという方法がある。
+         *   これをやるには他のFragmentの例を見てもう少し経験値が必要そう。
+         */
+//        Intent intent = getIntent();
+//        String searchHistory = intent.getStringExtra(SearchHistoryActivity.FROM_SEARCH_HISTORY);
+//        SearchFragment searchFragment = new SearchFragment();
+//        if (searchHistory != null && searchHistory.length() != 0) {
+//            Bundle bundle = new Bundle();
+//            bundle.putString(SearchHistoryActivity.FROM_SEARCH_HISTORY, searchHistory);
+//            searchFragment.setArguments(bundle);
+//        }
+//
+//        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+//        viewPager = (ViewPager) findViewById(R.id.viewPager);
+//        viewPagerAdapter = new ViewFragmentPagerAdapter(getSupportFragmentManager());
+//        viewPagerAdapter.addFragments(searchFragment, "Search");
+//        viewPagerAdapter.addFragments(new TrendFragment(), "Trend");
+//        viewPagerAdapter.addFragments(new SubFragment(), "Sub");
+//        viewPager.setAdapter(viewPagerAdapter);
+//        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -74,9 +79,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search_history:
-                Intent intent = new Intent(this, SearchHistoryActivity.class);
-                startActivity(intent);
+                SearchHistoryFragment searchHistoryFragment = new SearchHistoryFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, searchHistoryFragment)
+                        .addToBackStack(null)
+                        .commit();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.v("MainActivity", "onBackPressed");
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        super.onBackPressed();
     }
 }
