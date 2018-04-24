@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class LocalDataSource {
+class LocalDataSource {
 
     private static LocalDataSource sInstance;
 
@@ -87,15 +87,27 @@ public class LocalDataSource {
         );
     }
 
-    public List<String> loadLatestSearchQuery() {
+//    public List<String> loadLatestSearchQuery() {
+//
+//        return ormaDatabase
+//                .selectFromQuery()
+//                .orderByUpdatedAtDesc()
+//                .limit(20)
+//                .toList()
+//                .stream()
+//                .map(query -> query.getQuery())
+//                .collect(Collectors.toList());
+//    }
 
-        return ormaDatabase
-                .selectFromQuery()
-                .orderByUpdatedAtDesc()
-                .limit(20)
-                .toList()
-                .stream()
-                .map(query -> query.getQuery())
-                .collect(Collectors.toList());
+
+    public Observable<List<Query>> loadLatestSearchQuery() {
+
+        return BehaviorSubject.createDefault(
+                ormaDatabase
+                        .selectFromQuery()
+                        .orderByUpdatedAtDesc()
+                        .limit(20)
+                        .toList());
     }
+
 }

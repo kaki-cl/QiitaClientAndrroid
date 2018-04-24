@@ -3,6 +3,7 @@ package com.example.atuski.qiitaqlient.repository.search;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.atuski.qiitaqlient.model.Query;
 import com.example.atuski.qiitaqlient.repository.api.QiitaClient;
 import com.example.atuski.qiitaqlient.repository.api.QiitaService;
 
@@ -82,8 +83,26 @@ public class SearchRepository {
         return localDataSource.loadArticles(query);
     }
 
-    public List<String> loadLatestSearchQuery() {
+//    public List<String> loadLatestSearchQuery() {
+//
+//        return localDataSource.loadLatestSearchQuery();
+//    }
+
+
+//    public List<Query> loadLatestSearchQuery() {
+//
+//        return localDataSource.loadLatestSearchQuery();
+//    }
+
+    public Observable<List<Query>> loadLatestSearchQuery() {
 
         return localDataSource.loadLatestSearchQuery();
+    }
+
+
+    public void test(String code) {
+
+//        qiitaClient.qiitaService.getUserInfo(code);
+
     }
 }

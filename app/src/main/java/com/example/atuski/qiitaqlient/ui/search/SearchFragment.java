@@ -46,7 +46,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.search_fragment_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.search_fragment, container, false);
         binding.setViewModel(searchViewModel);
 
         initRecyclerView();

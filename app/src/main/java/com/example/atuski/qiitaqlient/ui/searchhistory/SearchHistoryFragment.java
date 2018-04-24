@@ -1,6 +1,7 @@
 package com.example.atuski.qiitaqlient.ui.searchhistory;
 
 //import android.app.Fragment;
+import android.databinding.DataBindingUtil;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,9 @@ import android.view.ViewGroup;
 
 import com.example.atuski.qiitaqlient.MainActivity;
 import com.example.atuski.qiitaqlient.R;
+import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
+
+//import com.example.atuski.qiitaqlient.databinding.SearchHistoryBinding;
 
 import java.util.ArrayList;
 
@@ -36,10 +40,15 @@ public class SearchHistoryFragment extends Fragment {
 
     private AppCompatActivity activity;
 
+    private SearchHistoryMainViewModel mainViewModel;
+
+//    private SearchHistoryBinding binding;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        mainViewModel = new SearchHistoryMainViewModel();
     }
 
     @Nullable
@@ -47,10 +56,10 @@ public class SearchHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 //        super.onCreateView(inflater, container, savedInstanceState);
         view = inflater.inflate(R.layout.search_history, container, false);
+//        binding = DataBindingUtil.inflate(inflater, R.layout.search_history, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.searchHIstoryToolbar);
 
-//        final AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,26 +67,57 @@ public class SearchHistoryFragment extends Fragment {
         setHasOptionsMenu(true);
         //todo ActionBarとToolbarの違いについて
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.search_history_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        recyclerView = (RecyclerView) view.findViewById(R.id.search_history_list);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        initRecyclerView();
+
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private void initRecyclerView() {
+        SearchHistoryItemAdapter itemAdapter = new SearchHistoryItemAdapter(
+                getContext(),
+                mainViewModel.searchHistoryItemViewModels);
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.search_history_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(itemAdapter);
+
+        mainViewModel.queryResults.subscribe((itemList) -> {
+
+            for (SearchHistoryItemViewModel item : itemList) {
+                item.clickTimes.subscribe((clickTimes) -> {
+                    if (0 < clickTimes) {
+                        Log.v("SearchHistoryFragment", item.query.get().getQuery());
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+//                        intent.putExtra(EXTRA_URL, item.article.get().getUrl());
+                        startActivity(intent);
+
+                    }
+                });
+            }
+
+            itemAdapter.clear();
+            itemAdapter.addAll(itemList);
+        });
+    }
+
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//
         // 適当にデータ作成
-        ArrayList<String> array = new ArrayList<>();
-        array.add("A");
-        array.add("B");
-        array.add("C");
+//        ArrayList<String> array = new ArrayList<>();
+//        array.add("A");
+//        array.add("B");
+//        array.add("C");
 
         // この辺りはListViewと同じ
         // 今回は特に何もしないけど、一応クリック判定を取れる様にする
-        adapter = new TestRecyclerAdapter(context, array);
-        recyclerView.setAdapter(adapter);
-    }
+//        adapter = new TestRecyclerAdapter(context, array);
+//        recyclerView.setAdapter(adapter);
+//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {

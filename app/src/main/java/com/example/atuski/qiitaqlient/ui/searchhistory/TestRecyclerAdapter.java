@@ -69,7 +69,7 @@ public class TestRecyclerAdapter extends RecyclerView.Adapter<TestRecyclerAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.list_item_text);
+//            textView = (TextView) itemView.findViewById(R.id.list_item_text);
         }
     }
 
