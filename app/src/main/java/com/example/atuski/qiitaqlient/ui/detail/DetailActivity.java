@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.example.atuski.qiitaqlient.MainActivity;
@@ -20,5 +21,13 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         webView.loadUrl(intent.getStringExtra(MainActivity.EXTRA_URL));
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.v("DetailActivity", "onBackPressed");
+//        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//        startActivity(intent);
+//        super.onBackPressed();
     }
 }

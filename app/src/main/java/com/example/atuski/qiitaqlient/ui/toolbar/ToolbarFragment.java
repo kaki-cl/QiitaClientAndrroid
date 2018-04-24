@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.ViewFragmentPagerAdapter;
 import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
+import com.example.atuski.qiitaqlient.ui.stock.StockFragment;
 import com.example.atuski.qiitaqlient.ui.sub.SubFragment;
 import com.example.atuski.qiitaqlient.ui.trend.TrendFragment;
 
@@ -42,7 +43,25 @@ public class ToolbarFragment extends Fragment {
         ViewFragmentPagerAdapter viewPagerAdapter = new ViewFragmentPagerAdapter(activity.getSupportFragmentManager());
         SearchFragment searchFragment = new SearchFragment();
         viewPagerAdapter.addFragments(searchFragment, "Search");
-        viewPagerAdapter.addFragments(new TrendFragment(), "Trend");
+
+        String status;
+        if (getArguments().getBoolean("isLogin")) {
+            status = "loginUser";
+            Bundle bundle = new Bundle();
+            bundle.putString("USER_ID", getArguments().getString("USER_ID"));
+
+            StockFragment stockFragment = new StockFragment();
+            stockFragment.setArguments(bundle);
+            viewPagerAdapter.addFragments(stockFragment, status);
+
+        } else {
+            status = "Guest";
+            viewPagerAdapter.addFragments(new TrendFragment(), status);
+        }
+
+        Log.v("ToolbarFragment", status);
+
+
         viewPagerAdapter.addFragments(new SubFragment(), "Sub");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

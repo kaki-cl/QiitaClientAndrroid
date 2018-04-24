@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.atuski.qiitaqlient.model.Query;
+import com.example.atuski.qiitaqlient.model.Token;
+import com.example.atuski.qiitaqlient.model.UserInfo;
 import com.example.atuski.qiitaqlient.repository.api.QiitaClient;
 import com.example.atuski.qiitaqlient.repository.api.QiitaService;
 
@@ -100,9 +102,20 @@ public class SearchRepository {
     }
 
 
-    public void test(String code) {
+    public Observable<Token> fetchAccessToken(String code) {
 
-//        qiitaClient.qiitaService.getUserInfo(code);
-
+        String clientId = "dfd44c0b8c380894cac1ea43ff4b815a2661e461";
+        String clientSecret = "093660d3c232d54d33c09b7c2d9465ad8bb60202";
+        return qiitaClient.qiitaService.getAccessToken(clientId, clientSecret, code);
     }
+
+    public Observable<UserInfo> fetchUserInfo(String accessToken) {
+
+        String baseValue = "Bearer ";
+        String value = baseValue + accessToken;
+
+        return qiitaClient.qiitaService.getUserInfo(value);
+    }
+
+
 }

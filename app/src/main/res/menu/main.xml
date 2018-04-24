@@ -11,11 +11,9 @@
     <item android:id="@+id/search_history"
         android:title="SearchHistory" />
 
+    <!--ログイン時はログアウトにする。-->
     <item android:id="@+id/login"
         android:title="login" />
-
-    <item android:id="@+id/login_check"
-        android:title="login check" />
 
 
 

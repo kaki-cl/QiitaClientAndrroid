@@ -3,6 +3,7 @@ package com.example.atuski.qiitaqlient;
 import android.app.Application;
 
 import com.example.atuski.qiitaqlient.repository.search.SearchRepository;
+import com.example.atuski.qiitaqlient.repository.stock.StockRepository;
 import com.example.atuski.qiitaqlient.repository.trend.TrendRepository;
 
 public class QiitaQlientApp extends Application {
@@ -26,5 +27,9 @@ public class QiitaQlientApp extends Application {
 
     public TrendRepository getTrendRepository() {
         return TrendRepository.getInstance();
+    }
+
+    public StockRepository getStockRepository() {
+        return StockRepository.getInstance();
     }
 }

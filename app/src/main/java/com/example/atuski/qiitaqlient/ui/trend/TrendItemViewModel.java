@@ -7,10 +7,6 @@ import com.example.atuski.qiitaqlient.model.Article;
 
 import io.reactivex.subjects.BehaviorSubject;
 
-/**
- * Created by atuski on 2018/04/17.
- */
-
 public class TrendItemViewModel {
 
     public ObservableField<Article> article;
