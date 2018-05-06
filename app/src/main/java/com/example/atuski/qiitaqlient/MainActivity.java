@@ -1,33 +1,23 @@
 package com.example.atuski.qiitaqlient;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.example.atuski.qiitaqlient.model.UserInfo;
-import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
-import com.example.atuski.qiitaqlient.ui.search.SearchItemViewModel;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
 import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.lang.ref.WeakReference;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -38,14 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private UserInfo loginUserInfo;
 
-    private String userId;
-
-    private String userName;
-
-    private String profileImageUrl;
-
-    private boolean mIsLogin = false;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +35,24 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
-            loadUserAccount(savedInstanceState);
+            loadUserAccount();
         }
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // このメソッドを呼び出すためには、invalidateOptionsMenu();をコールする
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main, menu);
 
-        return super.onPrepareOptionsMenu(menu);
+        if (loginUserInfo.isLogin) {
+            MenuItem loginItem = menu.findItem(R.id.login);
+            loginItem.setVisible(false);
+        } else {
+            MenuItem logoutItem = menu.findItem(R.id.logout);
+            logoutItem.setVisible(false);
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -85,10 +76,17 @@ public class MainActivity extends AppCompatActivity {
                         "client_id=" + mClientId +
                         "&scope=" + mScope +
                         "&state=" + mState;
-
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                startActivity(intent);
+                Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(browseIntent);
                 break;
+
+            case R.id.logout:
+                deleteLocalUserInfo();
+                Log.v("deleteLocalUserInfo", "deleteLocalUserInfo");
+                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(mainIntent);
+                break;
+
             default:
                 break;
         }
@@ -104,18 +102,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(getResources().getString(R.string.IS_LOGIN), mIsLogin);
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    private void loadUserAccount(Bundle savedInstanceState) {
+    @SuppressLint("CheckResult")
+    private void loadUserAccount() {
 
         loginStatus.subscribe((loginStatus) -> {
             switch (loginStatus) {
@@ -132,62 +123,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 認証ページから戻ってきたときの処理
         Uri uri = getIntent().getData();
-
-        if (savedInstanceState != null && savedInstanceState.getBoolean("isLogin")) {
-            // 認証中の情報を使う。今はとりあえず再リクエストする。
-            //　本来はセッションチェック
-            Log.v("ログイン判定", "ログイン済み");
-            QiitaQlientApp
-                    .getInstance()
-                    .getSearchRepository()
-                    .fetchAccessToken(uri.getQueryParameter("code").toString())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe((token -> {
-                        Log.v("accessToken", token.getToken());
-                        QiitaQlientApp.getInstance().getSearchRepository()
-                                .fetchUserInfo(token.getToken())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe((userInfo -> {
-
-                                    loginUserInfo = userInfo;
-
-                                    if (loginUserInfo != null) {
-                                        Log.v("loginUserInfo", "nullじゃない");
-                                        Log.v("loginUserInfo", loginUserInfo.getId());
-
-                                    } else {
-                                        Log.v("loginUserInfo", "null");
-
-                                    }
-
-                                    userId = userInfo.getId();
-//                                    userName = userInfo.getName();
-//                                    profileImageUrl = userInfo.getProfile_image_url();
-
-                                    if (loginUserInfo == null) {
-                                        Log.v("loginUserInfo", "ゲストユーザー");
-                                        loginStatus.onNext("guestUser");
-                                    }
-
-                                    mIsLogin = true;
-
-                                    Log.v("loginUserInfo", "ログインユーザー");
-
-                                    loginStatus.onNext("loginUser");
-                                }));
-                    }));
+        if (uri != null) {
+            fetchUserInfo(uri);
             return;
         }
 
-        if (uri == null) {
+        if (loadLocalUserInfo()) {
+            Log.v("ログイン判定", "ログインユーザー");
+            loginStatus.onNext("loginUser");
+        } else {
             Log.v("ログイン判定", "ゲストユーザー");
             loginStatus.onNext("guestUser");
-            return;
         }
-
-        fetchLoginInfo(uri);
     }
 
     private void initViewPagerFragment(Boolean isLogin) {
@@ -196,13 +145,14 @@ public class MainActivity extends AppCompatActivity {
         bundle.putBoolean(getResources().getString(R.string.IS_LOGIN), isLogin);
 
         if (isLogin) {
-            bundle.putString(getResources().getString(R.string.USER_ID), userId);
+            bundle.putString(getResources().getString(R.string.USER_ID), loginUserInfo.id);
+//            bundle.putString(getResources().getString(R.string.USER_NAME), loginUserInfo.name);
+            bundle.putString(getResources().getString(R.string.PROFILE_IMAGE_URL), loginUserInfo.profile_image_url);
         }
 
         String lastQuery = getIntent().getStringExtra(getResources().getString(R.string.LAST_QUERY));
         if (lastQuery != null) {
             bundle.putString(getResources().getString(R.string.LAST_QUERY), lastQuery);
-            Log.v("MainActivity", lastQuery);
         }
 
         ToolbarFragment toolbarFragment = new ToolbarFragment();
@@ -215,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void fetchLoginInfo(Uri uri) {
+    @SuppressLint("CheckResult")
+    private void fetchUserInfo(Uri uri) {
 
         Log.v("ログイン判定", "ログインチャレンジ");
         // ログインチャレンジ
@@ -231,13 +182,55 @@ public class MainActivity extends AppCompatActivity {
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe((userInfo -> {
-                                userId = userInfo.getId();
-                                if (loginUserInfo == null) {
+
+                                if (userInfo != null) {
+                                    saveUserInfo(userInfo);
+                                }
+
+                                if (loadLocalUserInfo()) {
+                                    loginStatus.onNext("loginUser");
+                                } else {
                                     loginStatus.onNext("guestUser");
                                 }
-                                mIsLogin = true;
-                                loginStatus.onNext("loginUser");
                             }));
                 }));
+    }
+
+    private boolean loadLocalUserInfo() {
+
+        Log.v("loadLocalUserInfo", "loadLocalUserInfo");
+        SharedPreferences data = getSharedPreferences(getResources().getString(R.string.USER_INFO), Context.MODE_PRIVATE);
+        boolean isLogin = data.getBoolean(getResources().getString(R.string.IS_LOGIN), false);
+
+        if (!isLogin) {
+            Log.v("isLogin", "false");
+
+            UserInfo userInfo = new UserInfo();
+            userInfo.isLogin = false;
+            loginUserInfo = userInfo;
+            return false;
+        }
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.isLogin = isLogin;
+        userInfo.id = data.getString(getResources().getString(R.string.USER_ID), null);
+        userInfo.profile_image_url = data.getString(getResources().getString(R.string.PROFILE_IMAGE_URL), null);
+        loginUserInfo = userInfo;
+        return true;
+    }
+
+
+    private void saveUserInfo(UserInfo latestUserInfo) {
+
+        SharedPreferences data = getSharedPreferences(getResources().getString(R.string.USER_INFO), getApplicationContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+        editor.putBoolean(getResources().getString(R.string.IS_LOGIN), true);
+        editor.putString(getResources().getString(R.string.USER_ID), latestUserInfo.id);
+        editor.putString(getResources().getString(R.string.PROFILE_IMAGE_URL), latestUserInfo.profile_image_url);
+        editor.apply();
+    }
+
+    private void deleteLocalUserInfo() {
+        deleteSharedPreferences(getResources().getString(R.string.USER_INFO));
     }
 }

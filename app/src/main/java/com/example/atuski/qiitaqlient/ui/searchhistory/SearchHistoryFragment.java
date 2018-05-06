@@ -59,19 +59,15 @@ public class SearchHistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreateView(inflater, container, savedInstanceState);
+
         view = inflater.inflate(R.layout.search_history, container, false);
-//        binding = DataBindingUtil.inflate(inflater, R.layout.search_history, container, false);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.searchHIstoryToolbar);
-
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.searchHistoryToolbar);
         activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         activity.getSupportActionBar().setHomeButtonEnabled(true);
         setHasOptionsMenu(true);
-        //todo ActionBarとToolbarの違いについて
-
         initRecyclerView();
 
         return view;

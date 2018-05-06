@@ -11,5 +11,9 @@
     <string name="LAST_QUERY">LAST_QUERY</string>
     <string name="WEB_VIEW_URL">WEB_VIEW_URL</string>
     <string name="IS_LOGIN">IS_LOGIN</string>
+
+    <string name="USER_INFO">USER_INFO</string>
     <string name="USER_ID">USER_ID</string>
+    <string name="USER_NAME">USER_NAME</string>
+    <string name="PROFILE_IMAGE_URL">PROFILE_IMAGE_URL</string>
 </resources>

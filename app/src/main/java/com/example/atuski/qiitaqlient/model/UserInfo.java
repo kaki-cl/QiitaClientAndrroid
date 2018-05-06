@@ -13,6 +13,8 @@ public class UserInfo {
     @Expose
     public String name;
 
+    public boolean isLogin;
+
     @Expose
     public String profile_image_url;
 

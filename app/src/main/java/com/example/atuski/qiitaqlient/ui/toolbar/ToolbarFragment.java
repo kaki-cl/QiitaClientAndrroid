@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.ViewFragmentPagerAdapter;
@@ -24,6 +25,8 @@ import com.example.atuski.qiitaqlient.ui.sub.SubFragment;
 import com.example.atuski.qiitaqlient.ui.trend.TrendFragment;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 public class ToolbarFragment extends Fragment {
 
@@ -42,21 +45,24 @@ public class ToolbarFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         activity.setSupportActionBar(toolbar);
 
-        // ログイン済みならユーザープロファイルViewを表示
-        setLoginUserProfileView(activity, inflater);
 
         // ViewFragmentPagerAdapter
         ViewFragmentPagerAdapter viewPagerAdapter = new ViewFragmentPagerAdapter(getChildFragmentManager());
 
+        Bundle bundle = getArguments();
+
         // SearchFragment
         Fragment searchFragment = new SearchFragment();
-        Bundle bundle = getArguments();
         searchFragment.setArguments(bundle);
         viewPagerAdapter.addFragments(searchFragment, "Search");
 
         // TrendFragment or StockFragment いずれこの実装はやめる。
         String fragmentTag;
         if (bundle.getBoolean(getResources().getString(R.string.IS_LOGIN))) {
+
+            // ログイン済みならユーザープロファイルViewを表示
+            setLoginUserProfileView(activity, inflater, bundle);
+
             fragmentTag = "loginUser";
             bundle.putString(getResources().getString(R.string.USER_ID), getArguments().getString("USER_ID"));
             StockFragment stockFragment = new StockFragment();
@@ -84,18 +90,24 @@ public class ToolbarFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void setLoginUserProfileView(AppCompatActivity activity, LayoutInflater inflater) {
+    private void setLoginUserProfileView(AppCompatActivity activity, LayoutInflater inflater, Bundle bundle) {
 
         View customActionBarView = inflater.inflate(R.layout.login_user_profile, null);
-
 
         ActionBar actionBar = activity.getSupportActionBar();
         actionBar.setCustomView(customActionBarView);
         actionBar.setDisplayShowCustomEnabled(true);
 
+        TextView myTextView = (TextView) customActionBarView.findViewById(R.id.user_name);
+        myTextView.setText(bundle.getString(getResources().getString(R.string.USER_ID)));
+
+        Log.v("PROFILE_IMAGE_URL", bundle.getString(getResources().getString(R.string.PROFILE_IMAGE_URL)));
+        Log.v("USER_NAME", "USER_NAME");
+        Log.v("USER_NAME", bundle.getString(getResources().getString(R.string.USER_ID)));
+
         ImageView myImageView = (ImageView) customActionBarView.findViewById(R.id.action_bar_icon);
         Picasso.get()
-                .load("https://s3-ap-northeast-1.amazonaws.com/qiita-image-store/0/91182/b204cfd64e4a07b45e7042724a9d0965deab0132/medium.png?1516523902")
+                .load(bundle.getString(getResources().getString(R.string.PROFILE_IMAGE_URL)))
                 .into(myImageView, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -104,7 +116,7 @@ public class ToolbarFragment extends Fragment {
 
                     @Override
                     public void onError(Exception e) {
-                        Log.v("Callback", "onError");
+                        Log.v("Callback", "ononErrorError");
                         e.printStackTrace();
                     }
                 });
