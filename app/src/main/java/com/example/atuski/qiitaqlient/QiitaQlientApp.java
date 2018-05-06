@@ -1,10 +1,12 @@
 package com.example.atuski.qiitaqlient;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.atuski.qiitaqlient.repository.search.SearchRepository;
 import com.example.atuski.qiitaqlient.repository.stock.StockRepository;
 import com.example.atuski.qiitaqlient.repository.trend.TrendRepository;
+import com.example.atuski.qiitaqlient.ui.util.helper.ResourceResolver;
 
 public class QiitaQlientApp extends Application {
 
@@ -17,7 +19,6 @@ public class QiitaQlientApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         this.app = this;
     }
 
@@ -31,5 +32,9 @@ public class QiitaQlientApp extends Application {
 
     public StockRepository getStockRepository() {
         return StockRepository.getInstance();
+    }
+
+    public ResourceResolver getResourceResolver() {
+        return ResourceResolver.getInstance(getApplicationContext());
     }
 }

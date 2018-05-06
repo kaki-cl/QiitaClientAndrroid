@@ -2,6 +2,24 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--<data>-->
+        <!--<variable-->
+            <!--android:name="mIsLogin"-->
+            <!--android:type="com.example.atuski.qiitaqlient.MainActivity.mIsLogin"/>-->
+    <!--</data>-->
+
+    <!--<item-->
+        <!--android:title="test"-->
+        <!--app:showAsAction="always"-->
+        <!--android:id="@+id/testIcon"-->
+        <!--/>-->
+
+    <ImageView
+        android:title="test"
+        app:showAsAction="always"
+        android:id="@+id/testIcon" />
+
+
     <item android:id="@+id/menu_search"
         android:icon="@drawable/action_search"
         android:title="search"
@@ -9,6 +27,7 @@
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item android:id="@+id/search_history"
+        android:visible="true"
         android:title="SearchHistory" />
 
     <!--ログイン時はログアウトにする。-->
@@ -22,7 +41,11 @@
 
     <!--todo delete-->
     <!-- menu group -->
-    <group android:id="@+id/group_delete">
+    <group
+        android:id="@+id/group_delete"
+        >
+        <!--android:visible="@{mIsLogin.visible}"-->
+
         <item android:id="@+id/menu_archive"
             android:title="archive" />
         <item android:id="@+id/menu_delete"

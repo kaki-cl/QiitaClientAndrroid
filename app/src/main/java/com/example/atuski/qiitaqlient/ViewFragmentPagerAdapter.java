@@ -24,6 +24,10 @@ public class ViewFragmentPagerAdapter extends android.support.v4.app.FragmentPag
 
     @Override
     public Fragment getItem(int position) {
+
+        Log.v("ViewFragmentPagerAdapter", "getItem");
+        Log.v("ViewFragmentPagerAdapter", String.valueOf(position));
+
         return fragments.get(position);
     }
 
@@ -35,6 +39,10 @@ public class ViewFragmentPagerAdapter extends android.support.v4.app.FragmentPag
 
     @Override
     public CharSequence getPageTitle(int position) {
+
+        Log.v("ViewFragmentPagerAdapter", "getPageTitle");
+        Log.v("ViewFragmentPagerAdapter", tabTitles.get(position));
+
         return tabTitles.get(position);
     }
 }

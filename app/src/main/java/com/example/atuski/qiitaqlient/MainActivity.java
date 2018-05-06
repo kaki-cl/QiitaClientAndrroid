@@ -1,149 +1,67 @@
 package com.example.atuski.qiitaqlient;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.example.atuski.qiitaqlient.model.UserInfo;
+import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
 import com.example.atuski.qiitaqlient.ui.search.SearchItemViewModel;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
 import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
-//import com.example.atuski.qiitaqlient.databinding.MainActivityBinding;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.lang.ref.WeakReference;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_URL = "URL";
+    final BehaviorSubject<String> loginStatus = BehaviorSubject.createDefault("init");
 
-    public QiitaQlientApp app;
-    private ViewFragmentPagerAdapter viewPagerAdapter;
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
-
-    final BehaviorSubject<String> accessToken = BehaviorSubject.createDefault("");
-
-    final BehaviorSubject<String> isLogin = BehaviorSubject.createDefault("init");
+    private UserInfo loginUserInfo;
 
     private String userId;
 
-//    public MainActivityBinding binding;
+    private String userName;
+
+    private String profileImageUrl;
+
+    private boolean mIsLogin = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("MainActivityonCreate", "onCreate");
+
         setContentView(R.layout.main_activity);
-        loadUserAccount();
-
-        // SearchHistory用の処理
-        // todo ViewPagerの処理を他に譲渡するかどうか
-        /**
-         * ViewPagerFragmentを作って、そっちにBundle経由で渡すという方法がある。
-         */
-//        Intent intent = getIntent();
-//        String searchHistory = intent.getStringExtra(SearchHistoryActivity.FROM_SEARCH_HISTORY);
-//        SearchFragment searchFragment = new SearchFragment();
-//        if (searchHistory != null && searchHistory.length() != 0) {
-//            Bundle bundle = new Bundle();
-//            bundle.putString(SearchHistoryActivity.FROM_SEARCH_HISTORY, searchHistory);
-//            searchFragment.setArguments(bundle);
-//        }
-//
-//        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-//        viewPager = (ViewPager) findViewById(R.id.viewPager);
-//        viewPagerAdapter = new ViewFragmentPagerAdapter(getSupportFragmentManager());
-//        viewPagerAdapter.addFragments(searchFragment, "Search");
-//        viewPagerAdapter.addFragments(new TrendFragment(), "Trend");
-//        viewPagerAdapter.addFragments(new SubFragment(), "Sub");
-//        viewPager.setAdapter(viewPagerAdapter);
-//        tabLayout.setupWithViewPager(viewPager);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.v("MainActivityonCreate", "onStart");
-        // こっちでやったら記事のページから戻ってもおかしくならない？
-//        setContentView(R.layout.main_activity);
-//        loadUserAccount();
-
-        isLogin.subscribe((isLogin) -> {
-            if (isLogin == "guestUser") {
-                Log.v("isLogin", "false");
-
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isLogin", false);
-                ToolbarFragment toolbarFragment = new ToolbarFragment();
-                toolbarFragment.setArguments(bundle);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, toolbarFragment)
-                        .commit();
-            } else if (isLogin == "loginUser"){
-                Log.v("isLogin", "true");
-
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isLogin", true);
-
-                bundle.putString("USER_ID", userId);
-
-                ToolbarFragment toolbarFragment = new ToolbarFragment();
-                toolbarFragment.setArguments(bundle);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, toolbarFragment)
-                        .commit();
-            }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    private void loadUserAccount() {
-
-        Uri uri = getIntent().getData();
-        if (uri == null) {
-            Log.v("loadUserAccount", "Guest User");
-            isLogin.onNext("guestUser");
-            return;
+        if (savedInstanceState == null) {
+            loadUserAccount(savedInstanceState);
         }
+    }
 
-        QiitaQlientApp.getInstance().getSearchRepository()
-                .fetchAccessToken(uri.getQueryParameter("code").toString())
-                .subscribeOn(Schedulers.io())
-                .subscribe((token -> {
-                    Log.v("accessToken", token.getToken());
-                    QiitaQlientApp.getInstance().getSearchRepository()
-                            .fetchUserInfo(token.getToken())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe((userInfo -> {
-                                userId = userInfo.getId();
-                                Log.v("id", userInfo.getId());
-                                Log.v("name", userInfo.getName());
-                                isLogin.onNext("loginUser");
-                            }));
-                }));
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // このメソッドを呼び出すためには、invalidateOptionsMenu();をコールする
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -182,5 +100,144 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(getResources().getString(R.string.IS_LOGIN), mIsLogin);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void loadUserAccount(Bundle savedInstanceState) {
+
+        loginStatus.subscribe((loginStatus) -> {
+            switch (loginStatus) {
+                case "guestUser":
+                    Log.v("loadUserAccount", "guestUser");
+                    initViewPagerFragment(false);
+                    break;
+                case "loginUser":
+                    Log.v("loadUserAccount", "loginUser");
+                    initViewPagerFragment(true);
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        Uri uri = getIntent().getData();
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isLogin")) {
+            // 認証中の情報を使う。今はとりあえず再リクエストする。
+            //　本来はセッションチェック
+            Log.v("ログイン判定", "ログイン済み");
+            QiitaQlientApp
+                    .getInstance()
+                    .getSearchRepository()
+                    .fetchAccessToken(uri.getQueryParameter("code").toString())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe((token -> {
+                        Log.v("accessToken", token.getToken());
+                        QiitaQlientApp.getInstance().getSearchRepository()
+                                .fetchUserInfo(token.getToken())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe((userInfo -> {
+
+                                    loginUserInfo = userInfo;
+
+                                    if (loginUserInfo != null) {
+                                        Log.v("loginUserInfo", "nullじゃない");
+                                        Log.v("loginUserInfo", loginUserInfo.getId());
+
+                                    } else {
+                                        Log.v("loginUserInfo", "null");
+
+                                    }
+
+                                    userId = userInfo.getId();
+//                                    userName = userInfo.getName();
+//                                    profileImageUrl = userInfo.getProfile_image_url();
+
+                                    if (loginUserInfo == null) {
+                                        Log.v("loginUserInfo", "ゲストユーザー");
+                                        loginStatus.onNext("guestUser");
+                                    }
+
+                                    mIsLogin = true;
+
+                                    Log.v("loginUserInfo", "ログインユーザー");
+
+                                    loginStatus.onNext("loginUser");
+                                }));
+                    }));
+            return;
+        }
+
+        if (uri == null) {
+            Log.v("ログイン判定", "ゲストユーザー");
+            loginStatus.onNext("guestUser");
+            return;
+        }
+
+        fetchLoginInfo(uri);
+    }
+
+    private void initViewPagerFragment(Boolean isLogin) {
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(getResources().getString(R.string.IS_LOGIN), isLogin);
+
+        if (isLogin) {
+            bundle.putString(getResources().getString(R.string.USER_ID), userId);
+        }
+
+        String lastQuery = getIntent().getStringExtra(getResources().getString(R.string.LAST_QUERY));
+        if (lastQuery != null) {
+            bundle.putString(getResources().getString(R.string.LAST_QUERY), lastQuery);
+            Log.v("MainActivity", lastQuery);
+        }
+
+        ToolbarFragment toolbarFragment = new ToolbarFragment();
+        toolbarFragment.setArguments(bundle);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, toolbarFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void fetchLoginInfo(Uri uri) {
+
+        Log.v("ログイン判定", "ログインチャレンジ");
+        // ログインチャレンジ
+        QiitaQlientApp
+                .getInstance()
+                .getSearchRepository()
+                .fetchAccessToken(uri.getQueryParameter("code").toString())
+                .subscribeOn(Schedulers.io())
+                .subscribe((token -> {
+                    Log.v("accessToken", token.getToken());
+                    QiitaQlientApp.getInstance().getSearchRepository()
+                            .fetchUserInfo(token.getToken())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe((userInfo -> {
+                                userId = userInfo.getId();
+                                if (loginUserInfo == null) {
+                                    loginStatus.onNext("guestUser");
+                                }
+                                mIsLogin = true;
+                                loginStatus.onNext("loginUser");
+                            }));
+                }));
     }
 }

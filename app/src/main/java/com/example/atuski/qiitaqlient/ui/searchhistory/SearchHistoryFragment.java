@@ -20,8 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.atuski.qiitaqlient.MainActivity;
+import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
+import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
+import com.example.atuski.qiitaqlient.ui.util.helper.ResourceResolver;
 
 //import com.example.atuski.qiitaqlient.databinding.SearchHistoryBinding;
 
@@ -42,13 +45,15 @@ public class SearchHistoryFragment extends Fragment {
 
     private SearchHistoryMainViewModel mainViewModel;
 
-//    private SearchHistoryBinding binding;
+    private ResourceResolver resourceResolver;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
         mainViewModel = new SearchHistoryMainViewModel();
+
+        resourceResolver = QiitaQlientApp.getInstance().getResourceResolver();
     }
 
     @Nullable
@@ -66,9 +71,6 @@ public class SearchHistoryFragment extends Fragment {
         activity.getSupportActionBar().setHomeButtonEnabled(true);
         setHasOptionsMenu(true);
         //todo ActionBarとToolbarの違いについて
-
-//        recyclerView = (RecyclerView) view.findViewById(R.id.search_history_list);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         initRecyclerView();
 
@@ -91,7 +93,7 @@ public class SearchHistoryFragment extends Fragment {
                     if (0 < clickTimes) {
                         Log.v("SearchHistoryFragment", item.query.get().getQuery());
                         Intent intent = new Intent(getContext(), MainActivity.class);
-//                        intent.putExtra(EXTRA_URL, item.article.get().getUrl());
+                        intent.putExtra(resourceResolver.getString(R.string.LAST_QUERY), item.query.get().getQuery());
                         startActivity(intent);
 
                     }
@@ -102,22 +104,6 @@ public class SearchHistoryFragment extends Fragment {
             itemAdapter.addAll(itemList);
         });
     }
-
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//
-        // 適当にデータ作成
-//        ArrayList<String> array = new ArrayList<>();
-//        array.add("A");
-//        array.add("B");
-//        array.add("C");
-
-        // この辺りはListViewと同じ
-        // 今回は特に何もしないけど、一応クリック判定を取れる様にする
-//        adapter = new TestRecyclerAdapter(context, array);
-//        recyclerView.setAdapter(adapter);
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
@@ -132,8 +118,9 @@ public class SearchHistoryFragment extends Fragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
+                //todo 多分SearchHisotryFragmentにもLASTQUERYを渡す必要がある。
+//                intent.putExtra(LAST_QUERY, )
                 startActivity(intent);
-//                getFragmentManager().popBackStack(); //これだと実際の反応がいまいち。
             default:
                 break;
         }

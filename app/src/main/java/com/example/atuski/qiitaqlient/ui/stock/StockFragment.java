@@ -18,7 +18,6 @@ import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
 import com.example.atuski.qiitaqlient.ui.search.SearchItemAdapter;
 import com.example.atuski.qiitaqlient.ui.trend.TrendViewModel;
 
-import static com.example.atuski.qiitaqlient.MainActivity.EXTRA_URL;
 
 public class StockFragment extends Fragment {
 
@@ -60,7 +59,7 @@ public class StockFragment extends Fragment {
                 item.clickTimes.subscribe((clickTimes) -> {
                     if (0 < clickTimes) {
                         Intent intent = new Intent(getContext(), DetailActivity.class);
-                        intent.putExtra(EXTRA_URL, item.stock.get().getUrl());
+                        intent.putExtra(getResources().getString(R.string.WEB_VIEW_URL), item.stock.get().getUrl());
                         startActivity(intent);
                     }
                 });

@@ -7,4 +7,9 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
+
+    <string name="LAST_QUERY">LAST_QUERY</string>
+    <string name="WEB_VIEW_URL">WEB_VIEW_URL</string>
+    <string name="IS_LOGIN">IS_LOGIN</string>
+    <string name="USER_ID">USER_ID</string>
 </resources>

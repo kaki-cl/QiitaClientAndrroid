@@ -1,6 +1,7 @@
 package com.example.atuski.qiitaqlient.ui.sub;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,6 +70,21 @@ public class SubFragment extends Fragment {
 //                }
 //        );
 
+
+        if (savedInstanceState != null) {
+            Log.v("SubFragment", "true");
+            Log.v("SubFragment", savedInstanceState.getString("hoge"));
+        }
+
         return view;
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("hoge", "fuga");
     }
 }

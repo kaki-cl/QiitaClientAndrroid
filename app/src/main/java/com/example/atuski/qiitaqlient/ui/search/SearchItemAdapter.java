@@ -3,6 +3,7 @@ package com.example.atuski.qiitaqlient.ui.search;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -31,6 +32,8 @@ public class SearchItemAdapter extends ObservableListRecyclerAdapter<SearchItemV
 
         // アイテム単位のレイアウトファイルのインフレート
         // viewHolderの生成
+
+        Log.v("SearchItemAdapter", "onCreateViewHolder");
         return new BindingHolder<>(context, parent, R.layout.search_list_item);
     }
 
@@ -43,6 +46,9 @@ public class SearchItemAdapter extends ObservableListRecyclerAdapter<SearchItemV
         // データを設定
         SearchListItemBinding binding = holder.binding;
         binding.setSearchItemViewModel(searchItemViewModel);
+
+        Log.v("SearchItemAdapter", "onBindViewHolder");
+
     }
 
     @Override

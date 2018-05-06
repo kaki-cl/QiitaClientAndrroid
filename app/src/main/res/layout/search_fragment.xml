@@ -20,7 +20,6 @@
             android:hint="Keyword"
             android:inputType="text"
             android:onKey="@{viewModel.setOnKeyListener}">
-
         </EditText>
 
         <android.support.v7.widget.RecyclerView
