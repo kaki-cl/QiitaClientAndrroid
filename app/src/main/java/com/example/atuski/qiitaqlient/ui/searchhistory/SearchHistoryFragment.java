@@ -67,6 +67,7 @@ public class SearchHistoryFragment extends Fragment {
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         activity.getSupportActionBar().setHomeButtonEnabled(true);
+
         setHasOptionsMenu(true);
         initRecyclerView();
 
@@ -102,21 +103,14 @@ public class SearchHistoryFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.main, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         Log.v("SearchHistoryFragment", "onOptionsItemSelected");
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(activity.getApplicationContext(), MainActivity.class);
-                //todo 多分SearchHisotryFragmentにもLASTQUERYを渡す必要がある。
-//                intent.putExtra(LAST_QUERY, )
-                startActivity(intent);
+                // 一個前の画面に戻る
+                activity.getSupportFragmentManager()
+                        .popBackStackImmediate();
             default:
                 break;
         }

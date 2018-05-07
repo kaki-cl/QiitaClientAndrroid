@@ -35,12 +35,11 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Log.v("DetailActivity", "onBackPressed");
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
-        intent.putExtra(resourceResolver.getString(R.string.LAST_QUERY),
-                receivedIntent.getStringExtra(resourceResolver.getString(R.string.LAST_QUERY)));
-
-        startActivity(intent);
+        // うまくいった。
+//        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//        intent.putExtra(resourceResolver.getString(R.string.LAST_QUERY),
+//                receivedIntent.getStringExtra(resourceResolver.getString(R.string.LAST_QUERY)));
+//        startActivity(intent);
         super.onBackPressed();
     }
 }
