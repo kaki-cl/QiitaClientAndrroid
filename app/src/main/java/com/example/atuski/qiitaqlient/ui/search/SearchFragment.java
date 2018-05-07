@@ -78,18 +78,6 @@ public class SearchFragment extends Fragment {
 
         searchViewModel.itemResults
                 .subscribe((itemList) -> {
-            // 各アイテムのクリックイベントを実装
-            for (SearchItemViewModel item : itemList) {
-                item.clickTimes.subscribe((clickTimes) -> {
-                    if (0 < clickTimes) {
-                        Intent intent = new Intent(getContext(), DetailActivity.class);
-                        intent.putExtra(resourceResolver.getString(R.string.WEB_VIEW_URL), item.article.get().getUrl());
-                        intent.putExtra(resourceResolver.getString(R.string.LAST_QUERY), searchViewModel.getLastQuery()); // 復元用検索クエリ
-                        startActivity(intent);
-                    }
-                });
-            }
-
             // アダプターへの検索結果の更新
             searchItemAdapter.clear();
             searchItemAdapter.addAll(itemList);
@@ -116,6 +104,9 @@ public class SearchFragment extends Fragment {
 
         if (savedInstanceState != null) {
 
+            Log.v("SearchFragment savedInstanceState", "nullじゃない");
+
+
             // 画面回転用
             searchHistory = searchViewModel.getLastQuery();
             View view = binding.getRoot().findViewById(R.id.search_fragment_container);
@@ -138,19 +129,27 @@ public class SearchFragment extends Fragment {
                     editText.setText(searchHistory);
                     editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
                     editText.setSelection(editText.getText().length());
-                    //todo キーボードを閉じるようにする
-//                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
 
-                    binding.getRoot().getViewTreeObserver().removeOnWindowFocusChangeListener(this);
-//                    viewTreeObserver.removeOnWindowFocusChangeListener(this);
+                    Log.v("キーボード isActive", String.valueOf(imm.isActive()));
+
+//                    imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//                    imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+//                    imm.toggleSoftInputFromWindow(binding.getRoot().getWindowToken(), 0, InputMethodManager.HIDE_IMPLICIT_ONLY);
+//                    imm.toggleSoftInputFromWindow(binding.getRoot().getWindowToken(), 0, 0);
+
+                    Log.v("after hideSoftInputFromWindow", String.valueOf(imm.isActive()));
+
+//                    binding.getRoot().getViewTreeObserver().removeOnWindowFocusChangeListener(this);
                 }
             });
 
         } else {
-//            searchHistory = ;
-//            Log.v("searchHistoryTest", searchHistory);
+
+            Log.v("SearchFragment savedInstanceState", "null");
+
 
             View view = binding.getRoot().findViewById(R.id.search_fragment_container);
             ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
@@ -171,12 +170,13 @@ public class SearchFragment extends Fragment {
                     editText.setText(searchHistory);
                     editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
                     editText.setSelection(editText.getText().length());
-                    //todo キーボードを閉じるようにする
-//                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                    binding.getRoot().getViewTreeObserver().removeOnWindowFocusChangeListener(this);
-//                    viewTreeObserver.removeOnWindowFocusChangeListener(this);
 
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                    Log.v("キーボード isActive", String.valueOf(imm.isActive()));
+                    imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    Log.v("after hideSoftInputFromWindow", String.valueOf(imm.isActive()));
+//                    binding.getRoot().getViewTreeObserver().removeOnWindowFocusChangeListener(this);
                 }
             });
 
@@ -191,6 +191,6 @@ public class SearchFragment extends Fragment {
             Log.v("SearchFragment", searchViewModel.getLastQuery());
             outState.putString(resourceResolver.getString(R.string.LAST_QUERY), searchViewModel.getLastQuery());
         }
-        super.onSaveInstanceState(outState); //todo 一番上でも挙動が変わらないか確認
+        super.onSaveInstanceState(outState);
     }
 }

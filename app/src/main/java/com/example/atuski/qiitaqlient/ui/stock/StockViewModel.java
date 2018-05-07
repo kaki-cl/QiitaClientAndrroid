@@ -72,7 +72,7 @@ public class StockViewModel {
 
                         itemResults.onNext(stockList
                                 .stream()
-                                .map(stock -> new StockItemViewModel(new ObservableField<>(stock)))
+                                .map(stock -> new StockItemViewModel(new ObservableField<>(stock), context))
                                 .collect(Collectors.toList())
                         );
                     }

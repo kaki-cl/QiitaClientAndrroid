@@ -53,18 +53,6 @@ public class StockFragment extends Fragment {
         binding.stockList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         stockViewModel.itemResults.subscribe((itemList) -> {
-
-            // 各アイテムのクリックイベントを実装
-            for (StockItemViewModel item : itemList) {
-                item.clickTimes.subscribe((clickTimes) -> {
-                    if (0 < clickTimes) {
-                        Intent intent = new Intent(getContext(), DetailActivity.class);
-                        intent.putExtra(getResources().getString(R.string.WEB_VIEW_URL), item.stock.get().getUrl());
-                        startActivity(intent);
-                    }
-                });
-            }
-
             // アダプターへの検索結果の更新
             stockItemAdapter.clear();
             stockItemAdapter.addAll(itemList);

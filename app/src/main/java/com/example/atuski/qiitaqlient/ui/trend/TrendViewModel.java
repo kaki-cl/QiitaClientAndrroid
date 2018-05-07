@@ -95,7 +95,7 @@ public class TrendViewModel {
 
                                 itemResults.onNext(articleList
                                         .stream()
-                                        .map(article -> new SearchItemViewModel(new ObservableField<>(article)))
+                                        .map(article -> new SearchItemViewModel(new ObservableField<>(article), context))
                                         .collect(Collectors.toList())
                                 );
 
