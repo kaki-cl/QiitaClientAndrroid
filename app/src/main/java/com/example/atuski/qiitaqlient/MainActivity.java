@@ -36,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
             loadUserAccount();
+        } else {
+            loadLocalUserInfo();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.v("MainActivityonCreate", "onCreateOptionsMenu");
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main, menu);
 

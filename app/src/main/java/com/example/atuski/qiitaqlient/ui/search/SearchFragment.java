@@ -118,7 +118,6 @@ public class SearchFragment extends Fragment {
 
             // 画面回転用
             searchHistory = searchViewModel.getLastQuery();
-            Log.v("searchHistoryTest", searchHistory);
             View view = binding.getRoot().findViewById(R.id.search_fragment_container);
             ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
             viewTreeObserver.addOnWindowFocusChangeListener(new ViewTreeObserver.OnWindowFocusChangeListener() {
@@ -133,6 +132,7 @@ public class SearchFragment extends Fragment {
                         Log.v("onWindowFocusChanged", "null");
                         return;
                     }
+                    Log.v("searchHistoryTest", searchHistory);
 
                     EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
                     editText.setText(searchHistory);
