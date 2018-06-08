@@ -6,20 +6,14 @@ import android.util.Log;
 import com.example.atuski.qiitaqlient.model.Query;
 import com.example.atuski.qiitaqlient.model.Token;
 import com.example.atuski.qiitaqlient.model.UserInfo;
-import com.example.atuski.qiitaqlient.repository.api.QiitaClient;
-import com.example.atuski.qiitaqlient.repository.api.QiitaService;
+import com.example.atuski.qiitaqlient.api.QiitaClient;
+import com.example.atuski.qiitaqlient.api.QiitaService;
 
 import com.example.atuski.qiitaqlient.model.Article;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchRepository {
 

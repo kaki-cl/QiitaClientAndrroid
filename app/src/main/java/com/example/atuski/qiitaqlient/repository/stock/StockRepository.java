@@ -1,9 +1,7 @@
 package com.example.atuski.qiitaqlient.repository.stock;
 
-import com.example.atuski.qiitaqlient.model.Article;
 import com.example.atuski.qiitaqlient.model.Stock;
-import com.example.atuski.qiitaqlient.model.UserInfo;
-import com.example.atuski.qiitaqlient.repository.api.QiitaClient;
+import com.example.atuski.qiitaqlient.api.QiitaClient;
 
 import java.util.List;
 

@@ -1,12 +1,12 @@
 package com.example.atuski.qiitaqlient;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.example.atuski.qiitaqlient.repository.search.SearchRepository;
 import com.example.atuski.qiitaqlient.repository.stock.StockRepository;
 import com.example.atuski.qiitaqlient.repository.trend.TrendRepository;
 import com.example.atuski.qiitaqlient.ui.util.helper.ResourceResolver;
+import com.google.firebase.FirebaseApp;
 
 public class QiitaQlientApp extends Application {
 
@@ -20,6 +20,7 @@ public class QiitaQlientApp extends Application {
     public void onCreate() {
         super.onCreate();
         this.app = this;
+        FirebaseApp.initializeApp(this);
     }
 
     public SearchRepository getSearchRepository() {

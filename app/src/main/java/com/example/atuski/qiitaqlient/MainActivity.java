@@ -13,14 +13,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.atuski.qiitaqlient.api.SyncronizePostUserQlient;
+import com.example.atuski.qiitaqlient.model.Followee;
+import com.example.atuski.qiitaqlient.model.SyncronizePostUserResult;
 import com.example.atuski.qiitaqlient.model.UserInfo;
+import com.example.atuski.qiitaqlient.repository.followee.FolloweeRepository;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
 import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.HashMap;
+import java.util.List;
+
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +42,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.v("MainActivityonCreate", "onCreate");
 
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.v("MainActivity", "FirebaseInstanceId");
+        if (token != null) {
+            Log.v("MainActivity", token);
+        } else {
+            Log.v("MainActivity", "null");
+        }
+//        FirebaseMessaging.getInstance().subscribeToTopic("mytopic");
+
+
         setContentView(R.layout.main_activity);
+
         if (savedInstanceState == null) {
             loadUserAccount();
         } else {
@@ -48,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.main, menu);
 
         if (loginUserInfo.isLogin) {
-            MenuItem loginItem = menu.findItem(R.id.login);
-            loginItem.setVisible(false);
+            menu.findItem(R.id.login).setVisible(false);
+
         } else {
-            MenuItem logoutItem = menu.findItem(R.id.logout);
-            logoutItem.setVisible(false);
+            menu.findItem(R.id.logout).setVisible(false);
+            menu.findItem(R.id.syncronizePostUser).setVisible(false);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -90,11 +110,97 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(mainIntent);
                 break;
 
+            case R.id.syncronizePostUser:
+
+                /**
+                 * todo
+                 * リファクタ
+                 * .subscribe()メソッドはもとシンプルに行けなかったっけ？
+                 * 関数インターフェイスとは？
+                 */
+                FolloweeRepository.getInstance()
+                        .searchFollowees(loginUserInfo.id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<Followee>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(List<Followee> followees) {
+
+                                for (Followee followee : followees) {
+                                    requestSyncronize(followee.id);
+                                    Log.v("searchFollowees", "ここまできてる？");
+                                    Log.v("searchFollowees", followee.id);
+                                }
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.v("searchFollowees Error", "Error");
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+
+                break;
+
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //todo リファクタ
+    // 別クラスへ
+    private void requestSyncronize(String postUserId) {
+
+        Log.v("requestSyncronize","ここまできてる？");
+
+        HashMap<String, String> postParamters = new HashMap<>();
+        postParamters.put("qlientUserId", loginUserInfo.id);
+        postParamters.put("postUserId", postUserId);
+
+        SyncronizePostUserQlient.getInstance()
+                .requestSyncronizing(postParamters)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<SyncronizePostUserResult>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(SyncronizePostUserResult syncronizePostUserResult) {
+                        //todo OKだったら同期しました画面をだす。
+                        Log.v("requestSyncronize onNext", "ここまできてる？");
+//                        Log.v("SyncronizePostUserQlient test", syncronizePostUserResult.toString());
+                        Log.v("syncronizePostUserResult", syncronizePostUserResult.result);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.v("requestSyncronize Error", "Error");
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -132,10 +238,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (loadLocalUserInfo()) {
-            Log.v("ログイン判定", "ログインユーザー");
             loginStatus.onNext("loginUser");
         } else {
-            Log.v("ログイン判定", "ゲストユーザー");
             loginStatus.onNext("guestUser");
         }
     }

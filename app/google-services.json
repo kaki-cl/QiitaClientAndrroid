@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "49333285298",
+    "firebase_url": "https://lightqiita.firebaseio.com",
+    "project_id": "lightqiita",
+    "storage_bucket": "lightqiita.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49333285298:android:f72e2bbd51bf834e",
+        "android_client_info": {
+          "package_name": "com.example.atuski.qiitaqlient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49333285298-74evn51prqp3e70gsco305h7ejddlroo.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "49333285298-74evn51prqp3e70gsco305h7ejddlroo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAk4khUKghWihkBDnXIlCmPw7J_v5ADE4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

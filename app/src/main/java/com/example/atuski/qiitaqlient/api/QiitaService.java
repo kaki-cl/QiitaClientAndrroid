@@ -1,6 +1,7 @@
-package com.example.atuski.qiitaqlient.repository.api;
+package com.example.atuski.qiitaqlient.api;
 
 import com.example.atuski.qiitaqlient.model.Article;
+import com.example.atuski.qiitaqlient.model.Followee;
 import com.example.atuski.qiitaqlient.model.Stock;
 import com.example.atuski.qiitaqlient.model.Token;
 import com.example.atuski.qiitaqlient.model.UserInfo;
@@ -8,7 +9,6 @@ import com.example.atuski.qiitaqlient.model.UserInfo;
 import java.util.List;
 
 import io.reactivex.Observable;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -36,4 +36,9 @@ public interface QiitaService {
             @Path("user") String userId,
             @Query("page") int page,
             @Query("per_page") int perPage);
+
+
+    @GET("/api/v2/users/{user}/followees")
+    Observable<List<Followee>> getFollowees(@Path("user") String userId);
+
 }

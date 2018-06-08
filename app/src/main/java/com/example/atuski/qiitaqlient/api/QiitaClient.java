@@ -1,4 +1,4 @@
-package com.example.atuski.qiitaqlient.repository.api;
+package com.example.atuski.qiitaqlient.api;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

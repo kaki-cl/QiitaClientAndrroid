@@ -12,9 +12,25 @@
         android:roundIcon="@mipmap/ic_launcher_2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+
+        <service android:name=".service.NotificationMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.NotificationInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
         <activity android:name=".MainActivity"
-            android:noHistory="false"
-                  >
+            android:noHistory="false">
             <!--android:noHistory="false"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +45,14 @@
                     android:scheme="https"
                     android:host="lightqiita.com" />
 
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".PushReceiveActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="PUSH" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

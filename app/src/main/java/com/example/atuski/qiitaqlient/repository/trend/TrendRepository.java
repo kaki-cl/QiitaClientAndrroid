@@ -1,15 +1,12 @@
 package com.example.atuski.qiitaqlient.repository.trend;
 
-import android.util.Log;
-
 import com.example.atuski.qiitaqlient.model.Article;
-import com.example.atuski.qiitaqlient.repository.api.QiitaClient;
-import com.example.atuski.qiitaqlient.repository.api.QiitaService;
+import com.example.atuski.qiitaqlient.api.QiitaClient;
+import com.example.atuski.qiitaqlient.api.QiitaService;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import retrofit2.Retrofit;
 
 /**
  * Created by atuski on 2018/04/17.
