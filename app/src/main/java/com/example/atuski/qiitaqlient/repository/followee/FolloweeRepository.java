@@ -7,6 +7,7 @@ import com.example.atuski.qiitaqlient.model.Followee;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class FolloweeRepository {
 
@@ -27,6 +28,6 @@ public class FolloweeRepository {
 
     public Observable<List<Followee>> searchFollowees(String userId) {
 
-        return qiitaClient.qiitaService.getFollowees(userId);
+        return qiitaClient.qiitaService.getFollowees(userId).subscribeOn(Schedulers.io());
     }
 }

@@ -1,9 +1,6 @@
 package com.example.atuski.qiitaqlient;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,20 +12,13 @@ import android.view.MenuItem;
 
 import com.example.atuski.qiitaqlient.api.SyncronizePostUserQlient;
 import com.example.atuski.qiitaqlient.model.Followee;
-import com.example.atuski.qiitaqlient.model.SyncronizePostUserResult;
 import com.example.atuski.qiitaqlient.model.UserInfo;
 import com.example.atuski.qiitaqlient.repository.followee.FolloweeRepository;
+import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
 import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.util.HashMap;
-import java.util.List;
-
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,14 +41,44 @@ public class MainActivity extends AppCompatActivity {
         }
 //        FirebaseMessaging.getInstance().subscribeToTopic("mytopic");
 
-
         setContentView(R.layout.main_activity);
+    }
 
-        if (savedInstanceState == null) {
-            loadUserAccount();
-        } else {
-            loadLocalUserInfo();
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Log.v("MainonStart", "onStart");
+
+        Uri uri = getIntent().getData();
+        UserInfoRepository.getInstance(getApplicationContext())
+                .loadUserInfo(uri)
+                .subscribe(userInfo -> {
+                    loginUserInfo = userInfo;
+                    if (userInfo.isLogin) {
+                        // todo loginStatusをhashMapにするのもありかも。
+                        // そしたら loginUserInfoをpackage privateにする必要がなくなる
+                        loginStatus.onNext("loginUser");
+                    } else {
+                        loginStatus.onNext("guestUser");
+                    }
+                });
+
+        loginStatus.subscribe((loginStatus) -> {
+            switch (loginStatus) {
+                case "loginUser":
+                    Log.v("loadUserAccount", "loginUser");
+                    initViewPagerFragment(true);
+                    break;
+                case "guestUser":
+                    Log.v("loadUserAccount", "guestUser");
+                    initViewPagerFragment(false);
+                    break;
+                default:
+                    break;
+            }
+        });
+
     }
 
     @Override
@@ -92,65 +112,21 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.login:
-                String mClientId = "dfd44c0b8c380894cac1ea43ff4b815a2661e461";
-                String mScope = "read_qiita write_qiita";
-                String mState = "bb17785d811bb1913ef54b0a7657de780defaa2d";//todo to be random
-                String uri = "https://qiita.com/api/v2/oauth/authorize?" +
-                        "client_id=" + mClientId +
-                        "&scope=" + mScope +
-                        "&state=" + mState;
-                Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                startActivity(browseIntent);
+                UserInfoRepository.getInstance(getApplicationContext()).startAuthViewIntent();
                 break;
-
             case R.id.logout:
-                deleteLocalUserInfo();
+                UserInfoRepository.getInstance(getApplicationContext()).deleteLocalUserInfo();
                 Log.v("deleteLocalUserInfo", "deleteLocalUserInfo");
                 Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(mainIntent);
                 break;
-
             case R.id.syncronizePostUser:
-
-                /**
-                 * todo
-                 * リファクタ
-                 * .subscribe()メソッドはもとシンプルに行けなかったっけ？
-                 * 関数インターフェイスとは？
-                 */
-                FolloweeRepository.getInstance()
-                        .searchFollowees(loginUserInfo.id)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<Followee>>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onNext(List<Followee> followees) {
-
-                                for (Followee followee : followees) {
-                                    requestSyncronize(followee.id);
-                                    Log.v("searchFollowees", "ここまできてる？");
-                                    Log.v("searchFollowees", followee.id);
-                                }
-
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.v("searchFollowees Error", "Error");
-                                e.printStackTrace();
-                            }
-
-                            @Override
-                            public void onComplete() {
-
+                FolloweeRepository.getInstance().searchFollowees(loginUserInfo.id)
+                        .subscribe(followees -> {
+                            for (Followee followee : followees) {
+                                SyncronizePostUserQlient.getInstance().requestSynchronization(loginUserInfo.id, followee.id);
                             }
                         });
-
                 break;
 
             default:
@@ -158,49 +134,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    //todo リファクタ
-    // 別クラスへ
-    private void requestSyncronize(String postUserId) {
-
-        Log.v("requestSyncronize","ここまできてる？");
-
-        HashMap<String, String> postParamters = new HashMap<>();
-        postParamters.put("qlientUserId", loginUserInfo.id);
-        postParamters.put("postUserId", postUserId);
-
-        SyncronizePostUserQlient.getInstance()
-                .requestSyncronizing(postParamters)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<SyncronizePostUserResult>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(SyncronizePostUserResult syncronizePostUserResult) {
-                        //todo OKだったら同期しました画面をだす。
-                        Log.v("requestSyncronize onNext", "ここまできてる？");
-//                        Log.v("SyncronizePostUserQlient test", syncronizePostUserResult.toString());
-                        Log.v("syncronizePostUserResult", syncronizePostUserResult.result);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.v("requestSyncronize Error", "Error");
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -212,37 +145,6 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    @SuppressLint("CheckResult")
-    private void loadUserAccount() {
-
-        loginStatus.subscribe((loginStatus) -> {
-            switch (loginStatus) {
-                case "guestUser":
-                    Log.v("loadUserAccount", "guestUser");
-                    initViewPagerFragment(false);
-                    break;
-                case "loginUser":
-                    Log.v("loadUserAccount", "loginUser");
-                    initViewPagerFragment(true);
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        // 認証ページから戻ってきたときの処理
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            fetchUserInfo(uri);
-            return;
-        }
-
-        if (loadLocalUserInfo()) {
-            loginStatus.onNext("loginUser");
-        } else {
-            loginStatus.onNext("guestUser");
-        }
-    }
 
     private void initViewPagerFragment(Boolean isLogin) {
 
@@ -268,74 +170,5 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, toolbarFragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    @SuppressLint("CheckResult")
-    private void fetchUserInfo(Uri uri) {
-
-        Log.v("ログイン判定", "ログインチャレンジ");
-        // ログインチャレンジ
-        QiitaQlientApp
-                .getInstance()
-                .getSearchRepository()
-                .fetchAccessToken(uri.getQueryParameter("code").toString())
-                .subscribeOn(Schedulers.io())
-                .subscribe((token -> {
-                    Log.v("accessToken", token.getToken());
-                    QiitaQlientApp.getInstance().getSearchRepository()
-                            .fetchUserInfo(token.getToken())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe((userInfo -> {
-
-                                if (userInfo != null) {
-                                    saveUserInfo(userInfo);
-                                }
-
-                                if (loadLocalUserInfo()) {
-                                    loginStatus.onNext("loginUser");
-                                } else {
-                                    loginStatus.onNext("guestUser");
-                                }
-                            }));
-                }));
-    }
-
-    private boolean loadLocalUserInfo() {
-
-        Log.v("loadLocalUserInfo", "loadLocalUserInfo");
-        SharedPreferences data = getSharedPreferences(getResources().getString(R.string.USER_INFO), Context.MODE_PRIVATE);
-        boolean isLogin = data.getBoolean(getResources().getString(R.string.IS_LOGIN), false);
-
-        if (!isLogin) {
-            Log.v("isLogin", "false");
-
-            UserInfo userInfo = new UserInfo();
-            userInfo.isLogin = false;
-            loginUserInfo = userInfo;
-            return false;
-        }
-
-        UserInfo userInfo = new UserInfo();
-        userInfo.isLogin = isLogin;
-        userInfo.id = data.getString(getResources().getString(R.string.USER_ID), null);
-        userInfo.profile_image_url = data.getString(getResources().getString(R.string.PROFILE_IMAGE_URL), null);
-        loginUserInfo = userInfo;
-        return true;
-    }
-
-
-    private void saveUserInfo(UserInfo latestUserInfo) {
-
-        SharedPreferences data = getSharedPreferences(getResources().getString(R.string.USER_INFO), getApplicationContext().MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-        editor.putBoolean(getResources().getString(R.string.IS_LOGIN), true);
-        editor.putString(getResources().getString(R.string.USER_ID), latestUserInfo.id);
-        editor.putString(getResources().getString(R.string.PROFILE_IMAGE_URL), latestUserInfo.profile_image_url);
-        editor.apply();
-    }
-
-    private void deleteLocalUserInfo() {
-        deleteSharedPreferences(getResources().getString(R.string.USER_INFO));
     }
 }

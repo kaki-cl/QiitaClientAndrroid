@@ -22,29 +22,11 @@ public class SearchRepository {
 
     private QiitaClient qiitaClient;
 
-//    private Retrofit retrofit;
-//
-//    private QiitaService qiitaService;
-
     private LocalDataSource localDataSource;
 
     private SearchRepository(Context context) {
 
-//        Gson gson = new GsonBuilder()
-//                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-//                .excludeFieldsWithoutExposeAnnotation()
-//                .create();
-//
-//        this.retrofit = new Retrofit.Builder()
-//                .baseUrl("https://qiita.com")
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                .build();
-
         qiitaClient = QiitaClient.getInstance();
-
-//        this.qiitaService = retrofit.create(QiitaService.class);
-
         localDataSource = LocalDataSource.getInstance(context);
     }
 

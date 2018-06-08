@@ -5,5 +5,5 @@ import com.google.gson.annotations.Expose;
 public class LambdaResult {
 
     @Expose
-    public String resutl;
+    public String result;
 }

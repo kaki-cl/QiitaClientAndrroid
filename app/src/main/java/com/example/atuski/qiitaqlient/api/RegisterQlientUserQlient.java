@@ -8,32 +8,31 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class QiitaClient {
+public class RegisterQlientUserQlient {
 
-    private static QiitaClient qiitaClient;
+    private static RegisterQlientUserQlient mQlient;
 
-    public QiitaService qiitaService;
+    public RegisterQlientUserService mService;
 
-    private QiitaClient() {
-
+    private RegisterQlientUserQlient() {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://qiita.com")
+                .baseUrl("https://mbr7mvznqh.execute-api.ap-northeast-1.amazonaws.com")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        this.qiitaService = retrofit.create(QiitaService.class);
+        this.mService = retrofit.create(RegisterQlientUserService.class);
     }
 
-    public static QiitaClient getInstance(){
-        if (qiitaClient == null) {
-            qiitaClient = new QiitaClient();
+    public static RegisterQlientUserQlient getInstance() {
+        if (mQlient == null) {
+            mQlient = new RegisterQlientUserQlient();
         }
-        return qiitaClient;
+        return mQlient;
     }
 }
