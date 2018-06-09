@@ -12,7 +12,11 @@ import lombok.Data;
 public class Article {
 
     @PrimaryKey(autoincrement = true)
-    public int id;
+    public int indexId;
+
+    @Column
+    @Expose
+    public String id;
 
     @Column
     @Expose

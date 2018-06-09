@@ -58,6 +58,8 @@
             android:layout_height="54dp"
             android:background="@null"
             android:onClick="@{searchItemViewModel::onClick}"
+            android:onLongClick="@{(view) -> searchItemViewModel.onLongClick(view)}"
+
             />
     </FrameLayout>
 

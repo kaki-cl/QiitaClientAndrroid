@@ -1,13 +1,13 @@
-package com.example.atuski.qiitaqlient.repository.stock;
+package com.example.atuski.qiitaqlient.repository.followee;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.atuski.qiitaqlient.R;
-import com.example.atuski.qiitaqlient.model.Followee;
-import com.example.atuski.qiitaqlient.model.Stock;
 import com.example.atuski.qiitaqlient.api.QiitaClient;
+import com.example.atuski.qiitaqlient.model.Followee;
 
 import java.util.List;
 
@@ -15,48 +15,34 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.BehaviorSubject;
 
-/**
- * Created by atuski on 2018/04/24.
- */
+public class FollowRepository {
 
-public class StockRepository {
-
-    private static StockRepository sInstance;
+    private static FollowRepository sInstance;
 
     private QiitaClient qiitaClient;
 
     private Context context;
 
-    private StockRepository(Context context) {
+    private FollowRepository(Context context) {
 
         this.context = context;
         qiitaClient = QiitaClient.getInstance();
     }
 
-    public static StockRepository getInstance(Context context) {
+    public static FollowRepository getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new StockRepository(context);
+            sInstance = new FollowRepository(context);
         }
         return sInstance;
     }
 
-    public Observable<List<Stock>> searchStockItems(String userId) {
+    public Observable<List<Followee>> searchFollowees(String userId) {
 
-        return qiitaClient.qiitaService.getStockItems(userId, 1, 20)
-                .map((stockList) -> {
-
-//                    for (Article r : articleSearchResult) {
-//                        r.setQueryId(queryId);
-//                    }
-                    // 検索結果を保存
-//                    localDataSource.insertArticles(articleSearchResult);
-                    return stockList;
-                });
+        return qiitaClient.qiitaService.getFollowees(userId).subscribeOn(Schedulers.io());
     }
 
-    public Completable stockArticle(String articleId) {
+    public Completable followPostUser(String postUserId) {
 
         SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), Context.MODE_PRIVATE);
         String authHeaderValue = data.getString(context.getResources().getString(R.string.AUTHORIZATION_HEADER_VALUE), null);
@@ -70,7 +56,7 @@ public class StockRepository {
         }
 
         return qiitaClient.qiitaService
-                .stockArticle(articleId, authHeaderValue)
+                .followPostUser(postUserId, authHeaderValue)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

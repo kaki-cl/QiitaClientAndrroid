@@ -8,10 +8,12 @@ import com.example.atuski.qiitaqlient.model.UserInfo;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -41,4 +43,9 @@ public interface QiitaService {
     @GET("/api/v2/users/{user}/followees")
     Observable<List<Followee>> getFollowees(@Path("user") String userId);
 
+    @PUT("/api/v2/items/{itemId}/stock")
+    Completable stockArticle(@Path("itemId") String articleId, @Header("Authorization") String accessToken);
+
+    @PUT("/api/v2/users/{postUserId}/following")
+    Completable followPostUser(@Path("postUserId") String postUserId, @Header("Authorization") String accessToken);
 }

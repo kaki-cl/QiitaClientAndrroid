@@ -116,43 +116,73 @@ public class SearchViewModel {
                 repository.searchArticle(text)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<Article>>() {
+                        .subscribe(articles -> {
 
-                            @Override
-                            public void onNext(List<Article> result) {
-                                List<Article> articleList = new ArrayList<>();
-                                for (Article r : result) {
-                                    Article article = new Article();
-                                    article.setTitle(r.title);
-                                    article.setUrl(r.url);
-                                    article.setUser(r.user);
-                                    articleList.add(article);
-                                    Log.v("SearchViewModel", article.title);
-
-                                }
-
-                                Log.v("SearchViewModel", "SearchViewModel itemResults hashCode2");
-                                Log.v("SearchViewModel", String.valueOf(itemResults.hashCode()));
-
-                                itemResults.onNext(articleList
-                                        .stream()
-                                        .map(article -> new SearchItemViewModel(new ObservableField<>(article), context))
-                                        .collect(Collectors.toList())
-                                );
-
+                            List<Article> articleList = new ArrayList<>();
+                            for (Article r : articles) {
+                                Article article = new Article();
+                                article.setTitle(r.title);
+                                article.setUrl(r.url);
+                                article.setUser(r.user);
+                                article.setId(r.id);
+                                articleList.add(article);
+                                Log.v("SearchViewModel", article.title);
+                                Log.v("SearchViewModel", (r.id));
                             }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                e.printStackTrace();
-                            }
+                            Log.v("SearchViewModel", "SearchViewModel itemResults hashCode2");
+                            Log.v("SearchViewModel", String.valueOf(itemResults.hashCode()));
 
-                            @Override
-                            public void onSubscribe(Disposable d) {}
+                            itemResults.onNext(articleList
+                                    .stream()
+                                    .map(article -> new SearchItemViewModel(new ObservableField<>(article), context))
+                                    .collect(Collectors.toList())
+                            );
 
-                            @Override
-                            public void onComplete() {}
+
                         });
+
+
+//                repository.searchArticle(text)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Observer<List<Article>>() {
+//
+//                            @Override
+//                            public void onNext(List<Article> result) {
+//                                List<Article> articleList = new ArrayList<>();
+//                                for (Article r : result) {
+//                                    Article article = new Article();
+//                                    article.setTitle(r.title);
+//                                    article.setUrl(r.url);
+//                                    article.setUser(r.user);
+//                                    articleList.add(article);
+//                                    Log.v("SearchViewModel", article.title);
+//
+//                                }
+//
+//                                Log.v("SearchViewModel", "SearchViewModel itemResults hashCode2");
+//                                Log.v("SearchViewModel", String.valueOf(itemResults.hashCode()));
+//
+//                                itemResults.onNext(articleList
+//                                        .stream()
+//                                        .map(article -> new SearchItemViewModel(new ObservableField<>(article), context))
+//                                        .collect(Collectors.toList())
+//                                );
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            @Override
+//                            public void onSubscribe(Disposable d) {}
+//
+//                            @Override
+//                            public void onComplete() {}
+//                        });
 
                 // 表示内容更新時に、一番上までスクロールする。
 //                RecyclerView recyclerView = (RecyclerView) appCompatActivity.findViewById(R.id.qiita_list_activity);

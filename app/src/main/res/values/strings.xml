@@ -16,6 +16,7 @@
     <string name="USER_ID">USER_ID</string>
     <string name="USER_NAME">USER_NAME</string>
     <string name="PROFILE_IMAGE_URL">PROFILE_IMAGE_URL</string>
+    <string name="AUTHORIZATION_HEADER_VALUE">AUTHORIZATION_HEADER_VALUE</string>
 
     <string name="FCM_REGISTRATION">FCM_REGISTRATION</string>
     <string name="FCM_INSTANCE_ID">FCM_INSTANCE_ID</string>

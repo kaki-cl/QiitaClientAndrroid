@@ -97,10 +97,14 @@ public class UserInfoRepository {
 
         Log.v("UserInfoRepository", "getUserInfoFromAccessToken");
 
-
         //todo strings.xmlへ
         String baseValue = "Bearer ";
         String value = baseValue + accessToken;
+
+        SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+        editor.putString(context.getResources().getString(R.string.AUTHORIZATION_HEADER_VALUE), value);
+        editor.apply();
 
         return qiitaClient.qiitaService.getUserInfo(value);
     }

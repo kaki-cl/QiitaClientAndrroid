@@ -10,12 +10,16 @@ import lombok.Data;
 public class User implements Serializable {
 
     @Expose
+    public String id;
+
+    @Expose
     public String name;
 
     @Expose
     public String profile_image_url;
 
-    public User(String name, String profile_image_url) {
+    public User(String id, String name, String profile_image_url) {
+        this.id = id;
         this.name = name;
         this.profile_image_url = profile_image_url;
     }

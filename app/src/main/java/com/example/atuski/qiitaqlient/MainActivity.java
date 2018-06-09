@@ -13,44 +13,49 @@ import android.view.MenuItem;
 import com.example.atuski.qiitaqlient.api.SyncronizePostUserQlient;
 import com.example.atuski.qiitaqlient.model.Followee;
 import com.example.atuski.qiitaqlient.model.UserInfo;
-import com.example.atuski.qiitaqlient.repository.followee.FolloweeRepository;
+import com.example.atuski.qiitaqlient.repository.followee.FollowRepository;
 import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
 import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import io.reactivex.subjects.BehaviorSubject;
 
+/**
+ * todo
+ *
+ * swiperefresh
+ * 下に引っ張るほど読み込むようにする。
+ *
+ * followee一覧ページを作成する。
+ * followeeをクリックするとfolloweeの投稿ページへ。
+ *
+ * 検索ヒットしたアイテムをstockできるようにする。
+ * follow機能も実装する。stock機能の隣がいいかな。
+ *
+ * ソートなど検索条件を選べるようにする。
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
     final BehaviorSubject<String> loginStatus = BehaviorSubject.createDefault("init");
 
     private UserInfo loginUserInfo;
 
+//    private Bundle savedInstanceState;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("MainActivityonCreate", "onCreate");
 
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.v("MainActivity", "FirebaseInstanceId");
-        if (token != null) {
-            Log.v("MainActivity", token);
-        } else {
-            Log.v("MainActivity", "null");
-        }
-//        FirebaseMessaging.getInstance().subscribeToTopic("mytopic");
-
         setContentView(R.layout.main_activity);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.v("MainonStart", "onStart");
 
         Uri uri = getIntent().getData();
+        if (savedInstanceState != null && uri == null) {
+            Log.v("MainActivityonCreate", "return");
+            return;
+        }
+
         UserInfoRepository.getInstance(getApplicationContext())
                 .loadUserInfo(uri)
                 .subscribe(userInfo -> {
@@ -121,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(mainIntent);
                 break;
             case R.id.syncronizePostUser:
-                FolloweeRepository.getInstance().searchFollowees(loginUserInfo.id)
+                QiitaQlientApp.getInstance().getFollowRepository()
+                        .searchFollowees(loginUserInfo.id)
                         .subscribe(followees -> {
                             for (Followee followee : followees) {
                                 SyncronizePostUserQlient.getInstance().requestSynchronization(loginUserInfo.id, followee.id);

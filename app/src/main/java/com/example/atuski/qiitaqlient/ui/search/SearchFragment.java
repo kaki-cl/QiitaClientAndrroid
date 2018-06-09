@@ -1,6 +1,5 @@
 package com.example.atuski.qiitaqlient.ui.search;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,12 +18,8 @@ import android.widget.EditText;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.SearchFragmentBinding;
-import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
-import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryActivity;
 import com.example.atuski.qiitaqlient.ui.util.helper.ResourceResolver;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 public class SearchFragment extends Fragment {
 
