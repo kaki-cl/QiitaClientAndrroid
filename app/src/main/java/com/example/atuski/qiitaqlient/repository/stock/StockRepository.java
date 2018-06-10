@@ -2,24 +2,21 @@ package com.example.atuski.qiitaqlient.repository.stock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.databinding.ObservableField;
 import android.util.Log;
 
 import com.example.atuski.qiitaqlient.R;
-import com.example.atuski.qiitaqlient.model.Followee;
-import com.example.atuski.qiitaqlient.model.Stock;
 import com.example.atuski.qiitaqlient.api.QiitaClient;
+import com.example.atuski.qiitaqlient.ui.stock.StockItemViewModel;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
-
-/**
- * Created by atuski on 2018/04/24.
- */
 
 public class StockRepository {
 
@@ -28,6 +25,8 @@ public class StockRepository {
     private QiitaClient qiitaClient;
 
     private Context context;
+
+    public BehaviorSubject<List<StockItemViewModel>> stocks = BehaviorSubject.createDefault(Collections.emptyList());
 
     private StockRepository(Context context) {
 
@@ -42,32 +41,24 @@ public class StockRepository {
         return sInstance;
     }
 
-    public Observable<List<Stock>> searchStockItems(String userId) {
+    public void searchStockItems(String userId) {
 
-        return qiitaClient.qiitaService.getStockItems(userId, 1, 20)
-                .map((stockList) -> {
-
-//                    for (Article r : articleSearchResult) {
-//                        r.setQueryId(queryId);
-//                    }
-                    // 検索結果を保存
-//                    localDataSource.insertArticles(articleSearchResult);
-                    return stockList;
+        qiitaClient.qiitaService.getStockItems(userId, 1, 20)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(fetchedStocks -> {
+                    stocks.onNext(fetchedStocks
+                            .stream()
+                            .map(stock -> new StockItemViewModel(new ObservableField<>(stock), context))
+                            .collect(Collectors.toList()));
                 });
     }
 
     public Completable stockArticle(String articleId) {
 
+        Log.v("stockArticle", "stockArticle");
         SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), Context.MODE_PRIVATE);
         String authHeaderValue = data.getString(context.getResources().getString(R.string.AUTHORIZATION_HEADER_VALUE), null);
-        if (authHeaderValue == null) {
-            Log.v("stockArticle", "authHeader null");
-            //todo Completableを返す
-//            BehaviorSubject<Void> behaviorSubject = BehaviorSubject.create();
-//            return behaviorSubject;
-        } else {
-            Log.v("stockArticle", authHeaderValue);
-        }
 
         return qiitaClient.qiitaService
                 .stockArticle(articleId, authHeaderValue)

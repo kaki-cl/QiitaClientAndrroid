@@ -15,21 +15,20 @@ import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.model.Article;
 import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
 
-import io.reactivex.subjects.BehaviorSubject;
-
-
 public class SearchItemViewModel {
 
     public ObservableField<Article> article;
 
-    private final Context context;
+    private final LayoutInflater inflater;
 
-    final BehaviorSubject<Integer> clickTimes = BehaviorSubject.createDefault(0);
+    private final Context context;
 
     public SearchItemViewModel(ObservableField<Article> article, Context context) {
         this.article = article;
         this.context = context;
-    }
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        }
 
     public ObservableField<Article> getArticle() {
         return article;
@@ -51,35 +50,34 @@ public class SearchItemViewModel {
 
     //todo メソッド参照とリスナーバインディングの違いを調査
     public Boolean onLongClick(View view) {
-        Log.v("onLongClick", "ここまできた");
 
         PopupWindow mPopupWindow = new PopupWindow(context);
-
-        // レイアウト設定
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-
         View popupView = inflater.inflate(R.layout.search_item_popup, null);
+
         popupView.findViewById(R.id.stock_button).setOnClickListener(v -> {
 
             QiitaQlientApp.getInstance().getStockRepository()
                     .stockArticle(article.get().id)
                     .subscribe(() -> {
-                        Toast toast = Toast.makeText(context, "記事をストックしました。", Toast.LENGTH_SHORT);
+                            Log.v("stockActionResult", "ok");
+                        Toast.makeText(context, "記事をストックしました。", Toast.LENGTH_SHORT).show();
                     }, exception -> {
                         exception.printStackTrace();
                     });
         });
+
         popupView.findViewById(R.id.follow_button).setOnClickListener(v -> {
 
             QiitaQlientApp.getInstance().getFollowRepository()
                     .followPostUser(article.get().user.id)
                     .subscribe(() -> {
-                        Toast toast = Toast.makeText(context, "ユーザーをフォローしました。", Toast.LENGTH_SHORT);
-                        toast.show();
+                        Toast.makeText(context, "ユーザーをフォローしました。", Toast.LENGTH_SHORT)
+                                .show();
                     }, exception -> {
                         exception.printStackTrace();
                     });
         });
+
         popupView.findViewById(R.id.close_button).setOnClickListener(v -> {
             if (mPopupWindow.isShowing()) {
                 mPopupWindow.dismiss();
@@ -88,12 +86,8 @@ public class SearchItemViewModel {
 
         mPopupWindow.setContentView(popupView);
         popupView.findViewById(R.id.stock_button).setVisibility(View.VISIBLE);
-
-        // タップ時に他のViewでキャッチされないための設定
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setFocusable(true);
-
-        // 画面中央に表示
         mPopupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
 
         return true;
