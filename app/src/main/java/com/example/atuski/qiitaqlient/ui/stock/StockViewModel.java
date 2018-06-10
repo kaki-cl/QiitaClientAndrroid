@@ -31,7 +31,7 @@ public class StockViewModel {
         });
 
         stockRepository.searchStockItems(userId);
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) binding.swipeRefresh;
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) binding.stockSwipeRefresh;
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
