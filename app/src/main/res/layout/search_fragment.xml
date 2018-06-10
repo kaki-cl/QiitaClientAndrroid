@@ -28,7 +28,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/search_edit_text"
-            tools:listitem="@layout/search_list_item"/>
+            tools:listitem="@layout/search_list_item"
+            />
 
     </RelativeLayout>
 </layout>

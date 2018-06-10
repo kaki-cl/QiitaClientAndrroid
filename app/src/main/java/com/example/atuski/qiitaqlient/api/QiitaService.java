@@ -20,7 +20,10 @@ import retrofit2.http.Query;
 public interface QiitaService {
 
     @GET("/api/v2/items")
-    Observable<List<Article>> getArticles(@Query("query") String query);
+    Observable<List<Article>> getArticles(
+            @Query("query") String query,
+            @Query("per_page") Integer perPage,
+            @Query("page") Integer page);
 
 
     @POST("/api/v2/access_tokens")

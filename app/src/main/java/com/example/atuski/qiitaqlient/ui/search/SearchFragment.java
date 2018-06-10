@@ -1,11 +1,13 @@
 package com.example.atuski.qiitaqlient.ui.search;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,7 +20,22 @@ import android.widget.EditText;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.SearchFragmentBinding;
+import com.example.atuski.qiitaqlient.model.Article;
+import com.example.atuski.qiitaqlient.ui.util.helper.EndlessScrollListener;
 import com.example.atuski.qiitaqlient.ui.util.helper.ResourceResolver;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 
 
 public class SearchFragment extends Fragment {
@@ -29,8 +46,8 @@ public class SearchFragment extends Fragment {
     private String searchHistory;
     private ResourceResolver resourceResolver;
 
-
-    public SearchFragment() {}
+    public SearchFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +56,6 @@ public class SearchFragment extends Fragment {
         resourceResolver = QiitaQlientApp.getInstance().getResourceResolver();
 
         super.onCreate(savedInstanceState);
-        searchViewModel = new SearchViewModel(this, getContext());
     }
 
     @Nullable
@@ -48,6 +64,7 @@ public class SearchFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.search_fragment, container, false);
+        searchViewModel = new SearchViewModel(this, getContext());
         binding.setViewModel(searchViewModel);
         setRetainInstance(true);
 
@@ -73,9 +90,16 @@ public class SearchFragment extends Fragment {
 
         searchViewModel.itemResults
                 .subscribe((itemList) -> {
-            // アダプターへの検索結果の更新
-            searchItemAdapter.clear();
-            searchItemAdapter.addAll(itemList);
+                    // アダプターへの検索結果の更新
+                    searchItemAdapter.clear();
+                    searchItemAdapter.addAll(itemList);
+                });
+
+        RecyclerView recyclerView = binding.searchFragmentContainer.findViewById(R.id.qiita_list_activity);
+        searchViewModel.initRecyclerViewEvent(recyclerView);
+
+        searchViewModel.itemResults2.subscribe(items -> {
+            searchItemAdapter.addAll(items);
         });
     }
 

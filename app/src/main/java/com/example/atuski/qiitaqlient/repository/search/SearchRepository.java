@@ -38,27 +38,32 @@ public class SearchRepository {
         return sInstance;
     }
 
-    public Observable<List<Article>> searchArticle(String query) {
+    public Observable<List<Article>> searchArticle(String query, Integer page) {
 
-        if (localDataSource.isEmptyQuery(query) && localDataSource.isOldQuery(query)) {
-            Log.v("Repository", "Need to search via api for updating Articles");
+        Integer perPage = 20;
+        return qiitaClient.qiitaService.getArticles(query, perPage, page);
 
-            long queryId = localDataSource.upsertQuery(query);
-            return qiitaClient.qiitaService.getArticles(query)
-                    .map((articleSearchResult) -> {
-                        for (Article r : articleSearchResult) {
-                            r.setQueryId(queryId);
-                        }
 
-                        // 検索結果を保存
-                        localDataSource.insertArticles(articleSearchResult);
-                        return articleSearchResult;
-                    });
-        }
 
-        Log.v("Repository", "Fetch From Local DataSource");
-        localDataSource.upsertQuery(query);
-        return localDataSource.loadArticles(query);
+//        if (localDataSource.isEmptyQuery(query) && localDataSource.isOldQuery(query)) {
+//            Log.v("Repository", "Need to search via api for updating Articles");
+//
+//            long queryId = localDataSource.upsertQuery(query);
+//            return qiitaClient.qiitaService.getArticles(query, perPage, page)
+//                    .map((articleSearchResult) -> {
+//                        for (Article r : articleSearchResult) {
+//                            r.setQueryId(queryId);
+//                        }
+//
+//                        // 検索結果を保存
+//                        localDataSource.insertArticles(articleSearchResult);
+//                        return articleSearchResult;
+//                    });
+//        }
+//
+//        Log.v("Repository", "Fetch From Local DataSource");
+//        localDataSource.upsertQuery(query);
+//        return localDataSource.loadArticles(query);
     }
 
 //    public List<String> loadLatestSearchQuery() {

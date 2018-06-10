@@ -32,7 +32,7 @@ public class TrendRepository {
 
     public Observable<List<Article>> searchArticle(String query) {
 
-        return qiitaClient.qiitaService.getArticles(query)
+        return qiitaClient.qiitaService.getArticles(query, 20, 1)
                 .map((articleSearchResult) -> {
 
 //                    for (Article r : articleSearchResult) {
