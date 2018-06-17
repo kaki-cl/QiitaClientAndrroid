@@ -28,24 +28,21 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
     private static final String APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:209970830514:app/GCM/LightQiita";
     private static final String ENDPOINT = "https://sns.ap-northeast-1.amazonaws.com";
 
-    private static String ACCESS_KEY = "AKIAIP2Y7P4HC64NOUHQ";
-    private static String SECRET_KEY = "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";
+    private static String ACCESS_KEY;
+    private static String SECRET_KEY;
 
-//    private static String ACCESS_KEY;
-//    private static String SECRET_KEY;
+    public NotificationInstanceIDService() {
 
-//    public NotificationInstanceIDService() {
-//
-//        try{
-//            Log.v("NotificationIDService", "コンストラクタ");
-//            ApplicationInfo info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
-//            ACCESS_KEY = info.metaData.getString("access_key");
-//            SECRET_KEY = info.metaData.getString("secret_key");
-//        }catch(PackageManager.NameNotFoundException e){
-////            e.printStackTrace();
-//        }
-//    }
-//
+        try {
+            Log.v("NotificationIDService", "コンストラクタ");
+            ApplicationInfo info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            ACCESS_KEY = info.metaData.getString("awsAccessKey");
+            SECRET_KEY = info.metaData.getString("awsSecretKey");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
