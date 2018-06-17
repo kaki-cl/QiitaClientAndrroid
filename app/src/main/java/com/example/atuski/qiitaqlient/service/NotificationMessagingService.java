@@ -36,32 +36,22 @@ public class NotificationMessagingService extends FirebaseMessagingService {
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-
         Log.v(TAG, String.valueOf(remoteMessage.getData().size()));
-
-
-
         if (remoteMessage.getNotification() != null) {
             Log.v("getBody", remoteMessage.getNotification().getBody());
         }
 
-        String tmpMessage = remoteMessage.getData().toString();
+//        String message = remoteMessage.getNotification().getBody();
 
-        if (tmpMessage != null) {
-            Log.v("tmpMessage", tmpMessage);
-        }
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
 
-
-
-
         // プッシュメッセージのdataに含めた値を取得
         Map<String, String> data = remoteMessage.getData();
-//        Log.v("default", data.get("default"));
+        Log.v("default", data.get("default"));
 
         String message;
         if (data.get("default") != null) {
@@ -71,6 +61,7 @@ public class NotificationMessagingService extends FirebaseMessagingService {
         }
 
 
+//=====================================================
 
 //        Log.v("contentId", data.get("id"));
 //        Log.v("contentType", data.get("type"));
@@ -121,37 +112,49 @@ public class NotificationMessagingService extends FirebaseMessagingService {
 //        notificationManager.notify(0 , notificationBuilder.build());
 
 
-        // 案3
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this, "notify_001");
-        Intent ii = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, ii, 0);
+//=====================================================
 
-        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.bigText("sssss");
-        bigText.setBigContentTitle("Today's Bible Verse");
-        bigText.setSummaryText("Text in detail");
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle(message);
-        mBuilder.setContentText("Your text");
-        mBuilder.setPriority(Notification.PRIORITY_MAX);
-        mBuilder.setStyle(bigText);
+        try {
+            // 案3
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this, "notify_001");
+            Intent ii = new Intent(getApplicationContext(), MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, ii, 0);
+
+            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+//            bigText.bigText("sssss");
+            bigText.setBigContentTitle(message);
+            bigText.setSummaryText("Text in detail");
+            mBuilder.setContentIntent(pendingIntent);
+//            mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+            mBuilder.setSmallIcon(R.drawable.ic_stat_name);
+            mBuilder.setContentTitle(message);
+//            mBuilder.setContentText("setContentText");
+            mBuilder.setPriority(Notification.PRIORITY_MAX);
+            mBuilder.setStyle(bigText);
+//
+//
+//
+            NotificationManager mNotificationManager =
+                    (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("notify_001",
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_DEFAULT);
+
+                mNotificationManager.createNotificationChannel(channel);
+            }
 
 
 
-        NotificationManager mNotificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+//            startForeground(0, mBuilder.build());
+            mNotificationManager.notify(0, mBuilder.build());
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("notify_001",
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            mNotificationManager.createNotificationChannel(channel);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        mNotificationManager.notify(0, mBuilder.build());
 
     }
 }

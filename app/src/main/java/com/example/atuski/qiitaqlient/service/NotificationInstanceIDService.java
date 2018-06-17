@@ -1,6 +1,8 @@
 package com.example.atuski.qiitaqlient.service;
 
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -18,21 +20,38 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class NotificationInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String APPLICATION_ARN = "arn:aws:sns:ap-northeast-1:209970830514:app/GCM/LightQiita";
     private static final String ENDPOINT = "https://sns.ap-northeast-1.amazonaws.com";
-    private static final String ACCESS_KEY = "AKIAI4DII32SIT7OOWAA";
-    private static final String SECRET_KEY = "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";
 
+    private static String ACCESS_KEY = "AKIAIP2Y7P4HC64NOUHQ";
+    private static String SECRET_KEY = "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";
+
+//    private static String ACCESS_KEY;
+//    private static String SECRET_KEY;
+
+//    public NotificationInstanceIDService() {
+//
+//        try{
+//            Log.v("NotificationIDService", "コンストラクタ");
+//            ApplicationInfo info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+//            ACCESS_KEY = info.metaData.getString("access_key");
+//            SECRET_KEY = info.metaData.getString("secret_key");
+//        }catch(PackageManager.NameNotFoundException e){
+////            e.printStackTrace();
+//        }
+//    }
+//
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
         String token = FirebaseInstanceId.getInstance().getToken();
 
-        Log.v("NotificationInstanceIDService", token);
+        Log.v("NotificationIDService", token);
 
         sendRegistrationToServer(token);
     }
@@ -110,7 +129,15 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
         RegisterDeviceTokenQlient
                 .getInstance()
                 .registerDeviceToken(postParameter)
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lambdaResult -> {
+                    Log.v("registerDeviceToken", "OK");
+                }, error -> {
+                    Log.v("registerDeviceToken", "ERROR");
+                    error.printStackTrace();
+                })
+        ;
     }
 
     private String getEndPointArn() {
