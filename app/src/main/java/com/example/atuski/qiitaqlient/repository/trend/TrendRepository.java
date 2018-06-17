@@ -1,8 +1,11 @@
 package com.example.atuski.qiitaqlient.repository.trend;
 
+import android.content.Context;
+
 import com.example.atuski.qiitaqlient.model.Article;
 import com.example.atuski.qiitaqlient.api.QiitaClient;
 import com.example.atuski.qiitaqlient.api.QiitaService;
+import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 
 import java.util.List;
 
@@ -18,29 +21,25 @@ public class TrendRepository {
 
     private QiitaClient qiitaClient;
 
-    private TrendRepository() {
+    private Context context;
+
+    private TrendRepository(Context context) {
 
         qiitaClient = QiitaClient.getInstance();
+        this.context = context;
     }
 
-    public static TrendRepository getInstance() {
+    public static TrendRepository getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new TrendRepository();
+            sInstance = new TrendRepository(context);
         }
         return sInstance;
     }
 
     public Observable<List<Article>> searchArticle(String query) {
 
-        return qiitaClient.qiitaService.getArticles(query, 20, 1)
+        return qiitaClient.qiitaService.getArticles(query, 20, 1, UserInfoRepository.getInstance(context).getSavedAuthHeaderValue())
                 .map((articleSearchResult) -> {
-
-//                    for (Article r : articleSearchResult) {
-//                        r.setQueryId(queryId);
-//                    }
-
-                    // 検索結果を保存
-//                    localDataSource.insertArticles(articleSearchResult);
                     return articleSearchResult;
                 });
     }

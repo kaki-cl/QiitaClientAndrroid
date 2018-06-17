@@ -17,23 +17,19 @@ import com.example.atuski.qiitaqlient.repository.followee.FollowRepository;
 import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
 import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * todo
  *
- * swiperefresh
- * 下に引っ張るほど読み込むようにする。
+ * ＠追加したい機能
  *
  * followee一覧ページを作成する。
  * followeeをクリックするとfolloweeの投稿ページへ。
  *
- * 検索ヒットしたアイテムをstockできるようにする。
- * follow機能も実装する。stock機能の隣がいいかな。
- *
  * ソートなど検索条件を選べるようにする。
- *
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -48,11 +44,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.v("MainActivityonCreate", "onCreate");
 
-        setContentView(R.layout.main_activity);
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token != null) {
+            Log.v("MainActivityonCreate", token);
+        } else {
+            Log.v("MainActivityonCreate", "token null");
+        }
 
+
+
+        setContentView(R.layout.main_activity);
         Uri uri = getIntent().getData();
         if (savedInstanceState != null && uri == null) {
             Log.v("MainActivityonCreate", "return");
+
+            UserInfoRepository.getInstance(getApplicationContext())
+                    .loadUserInfo(uri)
+                    .subscribe(userInfo -> {
+                        loginUserInfo = userInfo;
+                    });
+
             return;
         }
 

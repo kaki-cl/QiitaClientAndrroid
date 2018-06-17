@@ -97,9 +97,9 @@ public class UserInfoRepository {
 
         Log.v("UserInfoRepository", "getUserInfoFromAccessToken");
 
-        //todo strings.xmlへ
         String baseValue = "Bearer ";
         String value = baseValue + accessToken;
+        Log.v("accessToken", value);
 
         SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), context.MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
@@ -132,9 +132,12 @@ public class UserInfoRepository {
                 .registerQlientUser(postParameters)
                 .subscribeOn(Schedulers.io())
                 .subscribe(lambdaResult -> {
-                    Log.v("RegisterQlientUserQlient", "ここまできてる？");
+                    Log.v("registerQlientUser", "OK");
                     Log.v("RegisterQlientUserQlient", lambdaResult.result);
-        });
+                }, error -> {
+                    Log.v("registerQlientUser", "ERROR");
+                    error.printStackTrace();
+                });
     }
 
     private Observable<UserInfo> loadLocalUserInfo() {
@@ -173,5 +176,11 @@ public class UserInfoRepository {
                 "&state=" + mState;
         Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         context.startActivity(browseIntent);
+    }
+
+    public String getSavedAuthHeaderValue() {
+
+        SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), context.MODE_PRIVATE);
+        return data.getString(context.getResources().getString(R.string.AUTHORIZATION_HEADER_VALUE), null);
     }
 }

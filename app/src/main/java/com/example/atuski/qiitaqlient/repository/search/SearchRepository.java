@@ -10,6 +10,7 @@ import com.example.atuski.qiitaqlient.api.QiitaClient;
 import com.example.atuski.qiitaqlient.api.QiitaService;
 
 import com.example.atuski.qiitaqlient.model.Article;
+import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 
 import java.util.List;
 
@@ -22,12 +23,15 @@ public class SearchRepository {
 
     private QiitaClient qiitaClient;
 
+    private Context context;
+
     private LocalDataSource localDataSource;
 
     private SearchRepository(Context context) {
 
         qiitaClient = QiitaClient.getInstance();
         localDataSource = LocalDataSource.getInstance(context);
+        this.context = context;
     }
 
     public static SearchRepository getInstance(Context context) {
@@ -41,7 +45,7 @@ public class SearchRepository {
     public Observable<List<Article>> searchArticle(String query, Integer page) {
 
         Integer perPage = 20;
-        return qiitaClient.qiitaService.getArticles(query, perPage, page);
+        return qiitaClient.qiitaService.getArticles(query, perPage, page, UserInfoRepository.getInstance(context).getSavedAuthHeaderValue());
 
 
 

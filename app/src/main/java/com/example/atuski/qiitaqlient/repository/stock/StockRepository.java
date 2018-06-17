@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.util.Log;
 
+import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.api.QiitaClient;
+import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 import com.example.atuski.qiitaqlient.ui.stock.StockItemViewModel;
 
 import java.util.Collections;
@@ -43,7 +45,7 @@ public class StockRepository {
 
     public void searchStockItems(String userId) {
 
-        qiitaClient.qiitaService.getStockItems(userId, 1, 20)
+        qiitaClient.qiitaService.getStockItems(userId, 1, 20, UserInfoRepository.getInstance(context).getSavedAuthHeaderValue())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fetchedStocks -> {
@@ -51,6 +53,9 @@ public class StockRepository {
                             .stream()
                             .map(stock -> new StockItemViewModel(new ObservableField<>(stock), context))
                             .collect(Collectors.toList()));
+                }, error -> {
+                    Log.v("searchStockItems", "ERROR");
+                    error.printStackTrace();
                 });
     }
 

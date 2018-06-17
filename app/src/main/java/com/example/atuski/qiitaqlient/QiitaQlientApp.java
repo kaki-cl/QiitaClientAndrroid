@@ -29,7 +29,7 @@ public class QiitaQlientApp extends Application {
     }
 
     public TrendRepository getTrendRepository() {
-        return TrendRepository.getInstance();
+        return TrendRepository.getInstance(this);
     }
 
     public StockRepository getStockRepository() {

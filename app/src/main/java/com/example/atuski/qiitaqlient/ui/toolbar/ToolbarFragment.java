@@ -75,7 +75,9 @@ public class ToolbarFragment extends Fragment {
         }
 
         // SubFragment
-        viewPagerAdapter.addFragments(new SubFragment(), "Sub");
+//        SubFragment subFragment = new SubFragment();
+//        subFragment.setArguments(bundle);
+//        viewPagerAdapter.addFragments(subFragment, "Sub");
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
@@ -100,10 +102,6 @@ public class ToolbarFragment extends Fragment {
 
         TextView myTextView = (TextView) customActionBarView.findViewById(R.id.user_name);
         myTextView.setText(bundle.getString(getResources().getString(R.string.USER_ID)));
-
-        Log.v("PROFILE_IMAGE_URL", bundle.getString(getResources().getString(R.string.PROFILE_IMAGE_URL)));
-        Log.v("USER_NAME", "USER_NAME");
-        Log.v("USER_NAME", bundle.getString(getResources().getString(R.string.USER_ID)));
 
         ImageView myImageView = (ImageView) customActionBarView.findViewById(R.id.action_bar_icon);
         Picasso.get()

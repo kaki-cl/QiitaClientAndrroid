@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -61,6 +62,13 @@ public class SyncronizePostUserQlient {
         postParameters.put("postUserId", postUserId);
 
         mService.requestSyncronizing(postParameters)
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lambdaResult -> {
+                    Log.v("requestSyncronize", "finish");
+                }, error -> {
+                    Log.v("requestSyncronizing", "ERROR");
+                    error.printStackTrace();
+                });
     }
 }

@@ -23,7 +23,8 @@ public interface QiitaService {
     Observable<List<Article>> getArticles(
             @Query("query") String query,
             @Query("per_page") Integer perPage,
-            @Query("page") Integer page);
+            @Query("page") Integer page,
+            @Header("Authorization") String authHeaderValue);
 
 
     @POST("/api/v2/access_tokens")
@@ -33,14 +34,15 @@ public interface QiitaService {
             @Query("code") String code);
 
     @GET("/api/v2/authenticated_user")
-    Observable<UserInfo> getUserInfo(@Header("Authorization") String accessToken);
+    Observable<UserInfo> getUserInfo(@Header("Authorization") String authHeaderValue);
 
     //https://qiita.com/api/v2/users/kaki4062/stocks?page=1&per_page=20
     @GET("/api/v2/users/{user}/stocks")
     Observable<List<Stock>> getStockItems(
             @Path("user") String userId,
             @Query("page") int page,
-            @Query("per_page") int perPage);
+            @Query("per_page") int perPage,
+            @Header("Authorization") String authHeaderValue);
 
 
     @GET("/api/v2/users/{user}/followees")
