@@ -1,6 +1,8 @@
 package com.example.atuski.qiitaqlient;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,21 +18,11 @@ import com.example.atuski.qiitaqlient.model.UserInfo;
 import com.example.atuski.qiitaqlient.repository.followee.FollowRepository;
 import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
-import com.example.atuski.qiitaqlient.ui.toolbar.ToolbarFragment;
+import com.example.atuski.qiitaqlient.ui.toolbar.ViewPagerFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import io.reactivex.subjects.BehaviorSubject;
 
-/**
- * todo
- *
- * ＠追加したい機能
- *
- * followee一覧ページを作成する。
- * followeeをクリックするとfolloweeの投稿ページへ。
- *
- * ソートなど検索条件を選べるようにする。
- */
 public class MainActivity extends AppCompatActivity {
 
     final BehaviorSubject<String> loginStatus = BehaviorSubject.createDefault("init");
@@ -50,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.v("MainActivityonCreate", "token null");
         }
-
 
 
         setContentView(R.layout.main_activity);
@@ -179,12 +170,12 @@ public class MainActivity extends AppCompatActivity {
             bundle.putString(getResources().getString(R.string.LAST_QUERY), lastQuery);
         }
 
-        ToolbarFragment toolbarFragment = new ToolbarFragment();
-        toolbarFragment.setArguments(bundle);
+        ViewPagerFragment viewPagerFragment = new ViewPagerFragment();
+        viewPagerFragment.setArguments(bundle);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, toolbarFragment)
+                .replace(R.id.fragment_container, viewPagerFragment)
                 .addToBackStack(null)
                 .commit();
     }
