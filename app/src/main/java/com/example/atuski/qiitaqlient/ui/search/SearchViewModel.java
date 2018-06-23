@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -48,6 +49,8 @@ public class SearchViewModel {
 
     private String lastQuery;
 
+    public SearchFragmentBinding binding;
+
     public String getLastQuery() {
         return lastQuery;
     }
@@ -56,12 +59,9 @@ public class SearchViewModel {
     protected ObservableList<SearchItemViewModel> searchItemViewModels;
 
     BehaviorSubject<List<SearchItemViewModel>> itemResults = BehaviorSubject.createDefault(Collections.emptyList());
-    BehaviorSubject<List<SearchItemViewModel>> itemResults2 = BehaviorSubject.createDefault(Collections.emptyList());
-//    final BehaviorSubject<Map<SearchItemAdapter, List<SearchItemViewModel>>> itemResults = BehaviorSubject.createDefault(Collections.emptyList());
+    BehaviorSubject<List<SearchItemViewModel>> addedItemResults = BehaviorSubject.createDefault(Collections.emptyList());
 
     public final ObservableArrayList<String> searchHistory = new ObservableArrayList<>();
-
-    private RecyclerView recyclerView;
 
     public SearchViewModel(Fragment appCompatActivity, Context context) {
 
@@ -72,40 +72,78 @@ public class SearchViewModel {
 
     }
 
-    public void initRecyclerViewEvent(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
+    public void initRecyclerViewEvent() {
 
-        this.recyclerView.addOnScrollListener(new EndlessScrollListener((LinearLayoutManager) this.recyclerView.getLayoutManager()) {
+        /** 検索結果の反映 */
+        itemResults.subscribe((itemList) -> {
+            SearchItemAdapter adapter = (SearchItemAdapter) binding.qiitaListActivity.getAdapter();
+            adapter.clear();
+            adapter.addAll(itemList);
+        });
+
+        /** onLoadによる追加検索結果の反映 */
+        addedItemResults.subscribe(itemList -> {
+            SearchItemAdapter adapter = (SearchItemAdapter) binding.qiitaListActivity.getAdapter();
+            adapter.addAll(itemList);
+        });
+
+        /** 追加検索結果の実装 */
+        RecyclerView searchItemsView = binding.searchFragmentContainer.findViewById(R.id.qiita_list_activity);
+        searchItemsView.addOnScrollListener(new EndlessScrollListener((LinearLayoutManager) searchItemsView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page) {
-                // Load
                 Log.v("onLoadMore", "onLoadMore");
-                Log.v("onLoadMore", String.valueOf(page));
 
                 QiitaQlientApp.getInstance().getSearchRepository()
                         .searchArticle(lastQuery, page)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(articles -> {
-                            List<Article> articleList = new ArrayList<>();
-                            for (Article r : articles) {
-                                Article article = new Article();
-                                article.setTitle(r.title);
-                                article.setUrl(r.url);
-                                article.setUser(r.user);
-                                article.setId(r.id);
-                                articleList.add(article);
-                                Log.v("SearchViewModel", article.title);
-                                Log.v("SearchViewModel", (r.id));
-                            }
-                            itemResults2.onNext(
-                                    articleList
-                                            .stream()
+                            addedItemResults.onNext(
+                                    articles.stream()
                                             .map(article -> new SearchItemViewModel(new ObservableField<>(article), context))
                                             .collect(Collectors.toList())
                             );
-
                         });
+            }
+        });
+    }
+
+    public void setOnwindowFocusChangedListener(String searchQuery) {
+
+        View view = binding.getRoot().findViewById(R.id.search_fragment_container);
+
+        view.getViewTreeObserver().addOnWindowFocusChangeListener(new ViewTreeObserver.OnWindowFocusChangeListener() {
+            @Override
+            public void onWindowFocusChanged(boolean hasFocus) {
+
+                Log.v("onWindowFocusChanged", "検索");
+
+                if (!hasFocus || searchQuery == null) {
+
+                    Log.v("onWindowFocusChanged", String.valueOf(hasFocus));
+                    Log.v("onWindowFocusChanged", "null");
+                    return;
+                }
+                Log.v("searchQueryTest", searchQuery);
+
+                EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
+                editText.setText(searchQuery);
+                editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
+                editText.setSelection(editText.getText().length());
+
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+
+                Log.v("キーボード isActive", String.valueOf(imm.isActive()));
+
+//                    imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//                    imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+//                    imm.toggleSoftInputFromWindow(binding.getRoot().getWindowToken(), 0, InputMethodManager.HIDE_IMPLICIT_ONLY);
+//                    imm.toggleSoftInputFromWindow(binding.getRoot().getWindowToken(), 0, 0);
+//                    binding.getRoot().getViewTreeObserver().removeOnWindowFocusChangeListener(this);
+                Log.v("after hideSoftInputFromWindow", String.valueOf(imm.isActive()));
+
             }
         });
     }
@@ -149,29 +187,11 @@ public class SearchViewModel {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(articles -> {
-
-                            List<Article> articleList = new ArrayList<>();
-                            for (Article r : articles) {
-                                Article article = new Article();
-                                article.setTitle(r.title);
-                                article.setUrl(r.url);
-                                article.setUser(r.user);
-                                article.setId(r.id);
-                                articleList.add(article);
-                                Log.v("SearchViewModel", article.title);
-                                Log.v("SearchViewModel", (r.id));
-                            }
-
-                            Log.v("SearchViewModel", "SearchViewModel itemResults hashCode2");
-                            Log.v("SearchViewModel", String.valueOf(itemResults.hashCode()));
-
-                            itemResults.onNext(articleList
+                            itemResults.onNext(articles
                                     .stream()
                                     .map(article -> new SearchItemViewModel(new ObservableField<>(article), context))
                                     .collect(Collectors.toList())
                             );
-
-
                         });
 
 
