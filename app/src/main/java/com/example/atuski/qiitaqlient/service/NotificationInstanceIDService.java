@@ -33,14 +33,14 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
 
     public NotificationInstanceIDService() {
 
-        try {
-            Log.v("NotificationIDService", "コンストラクタ");
-            ApplicationInfo info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
-            ACCESS_KEY = info.metaData.getString("awsAccessKey");
-            SECRET_KEY = info.metaData.getString("awsSecretKey");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        Log.v("NotificationIDService", "コンストラクタ");
+//        try {
+//            ApplicationInfo info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+//            ACCESS_KEY = info.metaData.getString("awsAccessKey");
+//            SECRET_KEY = info.metaData.getString("awsSecretKey");
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

@@ -11,10 +11,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // 環境変数を参照する
-        manifestPlaceholders = [
-                awsAccessKey: System.getenv("ACCESS_KEY"),
-                awsSecretKey: System.getenv("SECRET_KEY")
-        ]
+//        manifestPlaceholders = [
+//                awsAccessKey: System.getenv("ACCESS_KEY"),
+//                awsSecretKey: System.getenv("SECRET_KEY")
+//        ]
 
         javaCompileOptions {
             annotationProcessorOptions {
