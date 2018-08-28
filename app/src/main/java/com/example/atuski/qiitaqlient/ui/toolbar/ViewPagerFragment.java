@@ -21,12 +21,9 @@ import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.ViewFragmentPagerAdapter;
 import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
 import com.example.atuski.qiitaqlient.ui.stock.StockFragment;
-import com.example.atuski.qiitaqlient.ui.sub.SubFragment;
 import com.example.atuski.qiitaqlient.ui.trend.TrendFragment;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 public class ViewPagerFragment extends Fragment {
 
