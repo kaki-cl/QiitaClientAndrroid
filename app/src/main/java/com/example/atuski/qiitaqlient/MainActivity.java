@@ -1,13 +1,10 @@
 package com.example.atuski.qiitaqlient;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +12,6 @@ import android.view.MenuItem;
 import com.example.atuski.qiitaqlient.api.SyncronizePostUserQlient;
 import com.example.atuski.qiitaqlient.model.Followee;
 import com.example.atuski.qiitaqlient.model.UserInfo;
-import com.example.atuski.qiitaqlient.repository.followee.FollowRepository;
 import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
 import com.example.atuski.qiitaqlient.ui.searchhistory.SearchHistoryFragment;
 import com.example.atuski.qiitaqlient.ui.toolbar.ViewPagerFragment;
@@ -29,32 +25,20 @@ public class MainActivity extends AppCompatActivity {
 
     private UserInfo loginUserInfo;
 
-//    private Bundle savedInstanceState;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("MainActivityonCreate", "onCreate");
 
         String token = FirebaseInstanceId.getInstance().getToken();
-        if (token != null) {
-            Log.v("MainActivityonCreate", token);
-        } else {
-            Log.v("MainActivityonCreate", "token null");
-        }
-
 
         setContentView(R.layout.main_activity);
         Uri uri = getIntent().getData();
         if (savedInstanceState != null && uri == null) {
-            Log.v("MainActivityonCreate", "return");
-
             UserInfoRepository.getInstance(getApplicationContext())
                     .loadUserInfo(uri)
                     .subscribe(userInfo -> {
                         loginUserInfo = userInfo;
                     });
-
             return;
         }
 
@@ -74,11 +58,9 @@ public class MainActivity extends AppCompatActivity {
         loginStatus.subscribe((loginStatus) -> {
             switch (loginStatus) {
                 case "loginUser":
-                    Log.v("loadUserAccount", "loginUser");
                     initViewPagerFragment(true);
                     break;
                 case "guestUser":
-                    Log.v("loadUserAccount", "guestUser");
                     initViewPagerFragment(false);
                     break;
                 default:
@@ -90,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.v("MainActivityonCreate", "onCreateOptionsMenu");
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main, menu);
 
@@ -123,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.logout:
                 UserInfoRepository.getInstance(getApplicationContext()).deleteLocalUserInfo();
-                Log.v("deleteLocalUserInfo", "deleteLocalUserInfo");
                 Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(mainIntent);
                 break;

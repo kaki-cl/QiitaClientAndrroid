@@ -1,9 +1,6 @@
 package com.example.atuski.qiitaqlient.service;
 
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.util.Log;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.sns.AmazonSNSClient;
@@ -33,7 +30,6 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
 
     public NotificationInstanceIDService() {
 
-        Log.v("NotificationIDService", "コンストラクタ");
 //        try {
 //            ApplicationInfo info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
 //            ACCESS_KEY = info.metaData.getString("awsAccessKey");
@@ -47,9 +43,6 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         super.onTokenRefresh();
         String token = FirebaseInstanceId.getInstance().getToken();
-
-        Log.v("NotificationIDService", token);
-
         sendRegistrationToServer(token);
     }
 
@@ -116,7 +109,6 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
         //SharedPreferenceにでもendpointArnを保存して、次回以降はcreateEndpointArnの処理を省略しても良い(公式はその方式になってる)
         SharedPreferences data = getSharedPreferences(getResources().getString(R.string.FCM_REGISTRATION), getApplicationContext().MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
-        Log.v("storeEndpointArn", endpointArn);
         editor.putString(getResources().getString(R.string.FCM_INSTANCE_ID), endpointArn);
         editor.apply();
 
@@ -128,10 +120,7 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
                 .registerDeviceToken(postParameter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lambdaResult -> {
-                    Log.v("registerDeviceToken", "OK");
-                }, error -> {
-                    Log.v("registerDeviceToken", "ERROR");
+                .subscribe(lambdaResult -> { }, error -> {
                     error.printStackTrace();
                 })
         ;

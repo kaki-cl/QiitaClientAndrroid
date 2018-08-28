@@ -5,7 +5,6 @@ import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +22,6 @@ public abstract class ObservableListRecyclerAdapter<T, VH extends RecyclerView.V
         list.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<T>>() {
             @Override
             public void onChanged(ObservableList<T> ts) {
-                Log.v("ObservableListRecyclerAdapter", "onChanged");
                 notifyDataSetChanged(); //データセットの変更をすべてのobserverに通知
             }
 
@@ -61,9 +59,6 @@ public abstract class ObservableListRecyclerAdapter<T, VH extends RecyclerView.V
     }
 
     public void addAll(Collection<T> items) {
-
-
-        Log.v("ObservableListRecyclerAdapter", "ここまできてる？");
         list.addAll(items);
     }
 

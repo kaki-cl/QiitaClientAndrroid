@@ -3,7 +3,6 @@ package com.example.atuski.qiitaqlient.ui.stock;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.databinding.StockFragmentBinding;
@@ -36,7 +35,6 @@ public class StockViewModel {
 
             @Override
             public void onRefresh() {
-                Log.v("onRefresh", "onRefresh");
                 stockRepository.searchStockItems(userId);
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);// インディケーターがずっと回り続けないように

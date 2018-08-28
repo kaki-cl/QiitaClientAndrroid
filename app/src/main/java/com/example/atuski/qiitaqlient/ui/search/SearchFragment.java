@@ -1,15 +1,11 @@
 package com.example.atuski.qiitaqlient.ui.search;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +15,6 @@ import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.SearchFragmentBinding;
 import com.example.atuski.qiitaqlient.ui.util.helper.ResourceResolver;
-
-
 
 public class SearchFragment extends Fragment {
 
@@ -43,10 +37,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        Log.v("SearchFragment", "onCreateView");
-
         if (savedInstanceState == null) {
-            Log.v("SearchFragment", "savedInstanceState null");
             binding = DataBindingUtil.inflate(inflater, R.layout.search_fragment, container, false);
             searchViewModel = new SearchViewModel(this, getContext());
             binding.setViewModel(searchViewModel);
@@ -87,9 +78,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
 
-        Log.v("SearchFragment", "onSaveInstanceState");
         if (searchViewModel.getLastQuery() != null) {
-            Log.v("SearchFragment", searchViewModel.getLastQuery());
             outState.putString(resourceResolver.getString(R.string.LAST_QUERY), searchViewModel.getLastQuery());
         }
         super.onSaveInstanceState(outState);

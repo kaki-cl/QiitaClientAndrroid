@@ -2,7 +2,6 @@ package com.example.atuski.qiitaqlient;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 public class PushReceiveActivity extends AppCompatActivity {
 
@@ -14,11 +13,5 @@ public class PushReceiveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String id = getIntent().getStringExtra(ARG_ID);
         String type = getIntent().getStringExtra(ARG_TYPE);
-
-        Log.v("PushReceiveActiviy", id);
-        Log.v("PushReceiveActiviy", type);
-
-        // 表示したい画面へデータを渡して画面遷移
     }
-
 }

@@ -1,7 +1,5 @@
 package com.example.atuski.qiitaqlient.ui.searchhistory;
 
-//import android.app.Fragment;
-import android.databinding.DataBindingUtil;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +17,7 @@ import android.view.ViewGroup;
 import com.example.atuski.qiitaqlient.MainActivity;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
-import com.example.atuski.qiitaqlient.ui.detail.DetailActivity;
-import com.example.atuski.qiitaqlient.ui.search.SearchFragment;
 import com.example.atuski.qiitaqlient.ui.util.helper.ResourceResolver;
-
-//import com.example.atuski.qiitaqlient.databinding.SearchHistoryBinding;
-
-import java.util.ArrayList;
 
 /**
  * Created by atuski on 2018/04/20.
@@ -88,7 +77,6 @@ public class SearchHistoryFragment extends Fragment {
             for (SearchHistoryItemViewModel item : itemList) {
                 item.clickTimes.subscribe((clickTimes) -> {
                     if (0 < clickTimes) {
-                        Log.v("SearchHistoryFragment", item.query.get().getQuery());
                         Intent intent = new Intent(getContext(), MainActivity.class);
                         intent.putExtra(resourceResolver.getString(R.string.LAST_QUERY), item.query.get().getQuery());
                         startActivity(intent);
@@ -105,7 +93,6 @@ public class SearchHistoryFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Log.v("SearchHistoryFragment", "onOptionsItemSelected");
         switch (item.getItemId()) {
             case android.R.id.home:
                 // 一個前の画面に戻る

@@ -3,9 +3,7 @@ package com.example.atuski.qiitaqlient.repository.stock;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
-import android.util.Log;
 
-import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.api.QiitaClient;
 import com.example.atuski.qiitaqlient.repository.userinfo.UserInfoRepository;
@@ -54,14 +52,12 @@ public class StockRepository {
                             .map(stock -> new StockItemViewModel(new ObservableField<>(stock), context))
                             .collect(Collectors.toList()));
                 }, error -> {
-                    Log.v("searchStockItems", "ERROR");
                     error.printStackTrace();
                 });
     }
 
     public Completable stockArticle(String articleId) {
 
-        Log.v("stockArticle", "stockArticle");
         SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), Context.MODE_PRIVATE);
         String authHeaderValue = data.getString(context.getResources().getString(R.string.AUTHORIZATION_HEADER_VALUE), null);
 

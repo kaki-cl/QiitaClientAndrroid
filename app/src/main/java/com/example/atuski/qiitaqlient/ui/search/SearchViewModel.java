@@ -1,18 +1,14 @@
 package com.example.atuski.qiitaqlient.ui.search;
 
-
 import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -21,22 +17,16 @@ import android.widget.EditText;
 import com.example.atuski.qiitaqlient.QiitaQlientApp;
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.databinding.SearchFragmentBinding;
-import com.example.atuski.qiitaqlient.model.Article;
 import com.example.atuski.qiitaqlient.repository.search.SearchRepository;
 import com.example.atuski.qiitaqlient.ui.util.helper.EndlessScrollListener;
-import com.trello.rxlifecycle2.RxLifecycle;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -92,8 +82,6 @@ public class SearchViewModel {
         searchItemsView.addOnScrollListener(new EndlessScrollListener((LinearLayoutManager) searchItemsView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page) {
-                Log.v("onLoadMore", "onLoadMore");
-
                 QiitaQlientApp.getInstance().getSearchRepository()
                         .searchArticle(lastQuery, page)
                         .subscribeOn(Schedulers.io())
@@ -117,33 +105,15 @@ public class SearchViewModel {
             @Override
             public void onWindowFocusChanged(boolean hasFocus) {
 
-                Log.v("onWindowFocusChanged", "検索");
-
                 if (!hasFocus || searchQuery == null) {
-
-                    Log.v("onWindowFocusChanged", String.valueOf(hasFocus));
-                    Log.v("onWindowFocusChanged", "null");
                     return;
                 }
-                Log.v("searchQueryTest", searchQuery);
-
                 EditText editText = binding.getRoot().findViewById(R.id.search_edit_text);
                 editText.setText(searchQuery);
                 editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
                 editText.setSelection(editText.getText().length());
 
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-
-                Log.v("キーボード isActive", String.valueOf(imm.isActive()));
-
-//                    imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                    imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-//                    imm.toggleSoftInputFromWindow(binding.getRoot().getWindowToken(), 0, InputMethodManager.HIDE_IMPLICIT_ONLY);
-//                    imm.toggleSoftInputFromWindow(binding.getRoot().getWindowToken(), 0, 0);
-//                    binding.getRoot().getViewTreeObserver().removeOnWindowFocusChangeListener(this);
-                Log.v("after hideSoftInputFromWindow", String.valueOf(imm.isActive()));
-
             }
         });
     }

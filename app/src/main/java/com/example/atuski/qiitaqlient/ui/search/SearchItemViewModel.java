@@ -3,7 +3,6 @@ package com.example.atuski.qiitaqlient.ui.search;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableField;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +58,6 @@ public class SearchItemViewModel {
             QiitaQlientApp.getInstance().getStockRepository()
                     .stockArticle(article.get().id)
                     .subscribe(() -> {
-                            Log.v("stockActionResult", "ok");
                         Toast.makeText(context, "記事をストックしました。", Toast.LENGTH_SHORT).show();
                     }, exception -> {
                         exception.printStackTrace();

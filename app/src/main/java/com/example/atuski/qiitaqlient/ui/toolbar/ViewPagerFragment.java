@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +31,6 @@ public class ViewPagerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        Log.v("ToolbarFragment", "onCreateView");
 
         final AppCompatActivity activity = (AppCompatActivity) getActivity();
 
@@ -105,13 +102,10 @@ public class ViewPagerFragment extends Fragment {
                 .load(bundle.getString(getResources().getString(R.string.PROFILE_IMAGE_URL)))
                 .into(myImageView, new Callback() {
                     @Override
-                    public void onSuccess() {
-                        Log.v("Callback", "onSuccess");
-                    }
+                    public void onSuccess() {}
 
                     @Override
                     public void onError(Exception e) {
-                        Log.v("Callback", "ononErrorError");
                         e.printStackTrace();
                     }
                 });
