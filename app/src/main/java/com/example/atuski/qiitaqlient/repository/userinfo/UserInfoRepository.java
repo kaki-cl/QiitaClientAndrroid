@@ -1,22 +1,19 @@
 package com.example.atuski.qiitaqlient.repository.userinfo;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 
 import com.example.atuski.qiitaqlient.R;
 import com.example.atuski.qiitaqlient.api.QiitaClient;
 import com.example.atuski.qiitaqlient.api.RegisterQlientUserQlient;
 import com.example.atuski.qiitaqlient.model.Token;
-import com.example.atuski.qiitaqlient.model.User;
 import com.example.atuski.qiitaqlient.model.UserInfo;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-
 import java.util.HashMap;
+import java.util.Optional;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -48,8 +45,6 @@ public class UserInfoRepository {
 
     public Observable<UserInfo> loadUserInfo(Uri uri) {
 
-        Log.v("UserInfoRepository", "loadUserInfo");
-
         if (uri == null) {
             return this.loadLocalUserInfo()
                     .subscribeOn(Schedulers.io())
@@ -62,8 +57,6 @@ public class UserInfoRepository {
     }
 
     private Observable<UserInfo> fetchRemoteUserInfo(Uri uri) {
-
-        Log.v("UserInfoRepository", "fetchRemoteUserInfo");
 
         String code = uri.getQueryParameter("code").toString();
 
@@ -84,22 +77,34 @@ public class UserInfoRepository {
     }
 
     private Observable<Token> fetchAccessToken(String code) {
+        return qiitaClient.qiitaService.getAccessToken(fetchClientIdStr(), fetchClientSecretStr(), code);
+    }
 
-        Log.v("UserInfoRepository", "fetchAccessToken");
+    private String fetchClientIdStr() {
 
-        //todo strings.xmlへ
-        String clientId = "dfd44c0b8c380894cac1ea43ff4b815a2661e461";
-        String clientSecret = "093660d3c232d54d33c09b7c2d9465ad8bb60202";
-        return qiitaClient.qiitaService.getAccessToken(clientId, clientSecret, code);
+        Optional<Integer> clientId = Optional.ofNullable(R.string.qiitaClientId);
+        if (clientId.isPresent()) {
+            return context.getResources().getString(R.string.qiitaClientId);
+        } else {
+            return context.getResources().getString(R.string.dummyQiitaClientId);
+        }
+    }
+
+    private String fetchClientSecretStr() {
+
+        Optional<Integer> clientSecret = Optional.ofNullable((R.string.qiitaClientSecret));
+        String clientSecretStr;
+        if (clientSecret.isPresent()) {
+            return context.getResources().getString(R.string.qiitaClientSecret);
+        } else {
+            return context.getResources().getString(R.string.dummyQiitaClientId);
+        }
     }
 
     private Observable<UserInfo> getUserInfoFromAccessToken(String accessToken) {
 
-        Log.v("UserInfoRepository", "getUserInfoFromAccessToken");
-
         String baseValue = "Bearer ";
         String value = baseValue + accessToken;
-        Log.v("accessToken", value);
 
         SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), context.MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
@@ -111,8 +116,6 @@ public class UserInfoRepository {
 
     private void saveUserInfo(UserInfo latestUserInfo) {
 
-        Log.v("UserInfoRepository", "saveUserInfo");
-
         SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), context.MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
         editor.putBoolean(context.getResources().getString(R.string.IS_LOGIN), true);
@@ -123,8 +126,6 @@ public class UserInfoRepository {
 
     private void registerQlientUser(String qlientUserId) {
 
-        Log.v("UserInfoRepository", "registerQlientUser");
-
         HashMap<String, String> postParameters= new HashMap<>();
         postParameters.put("qlientUserId", qlientUserId);
         postParameters.put("deviceToken", FirebaseInstanceId.getInstance().getToken());
@@ -132,23 +133,17 @@ public class UserInfoRepository {
                 .registerQlientUser(postParameters)
                 .subscribeOn(Schedulers.io())
                 .subscribe(lambdaResult -> {
-                    Log.v("registerQlientUser", "OK");
-                    Log.v("RegisterQlientUserQlient", lambdaResult.result);
                 }, error -> {
-                    Log.v("registerQlientUser", "ERROR");
                     error.printStackTrace();
                 });
     }
 
     private Observable<UserInfo> loadLocalUserInfo() {
 
-        Log.v("loadLocalUserInfo", "loadLocalUserInfo");
         SharedPreferences data = context.getSharedPreferences(context.getResources().getString(R.string.USER_INFO), Context.MODE_PRIVATE);
         boolean isLogin = data.getBoolean(context.getResources().getString(R.string.IS_LOGIN), false);
 
         if (!isLogin) {
-            Log.v("isLogin", "false");
-
             UserInfo userInfo = new UserInfo();
             userInfo.isLogin = false;
             return BehaviorSubject.createDefault(userInfo);
@@ -166,11 +161,11 @@ public class UserInfoRepository {
     }
 
     public void startAuthViewIntent() {
-        //todo 定数に
-        String mClientId = "dfd44c0b8c380894cac1ea43ff4b815a2661e461";
-        String mScope = "read_qiita write_qiita";
-        String mState = "bb17785d811bb1913ef54b0a7657de780defaa2d";//todo to be random
-        String uri = "https://qiita.com/api/v2/oauth/authorize?" +
+
+        String mClientId = fetchClientIdStr();
+        String mScope = context.getResources().getString(R.string.qiitaScope);
+        String mState = context.getResources().getString(R.string.qiitaStateStr);//todo to be random
+        String uri = context.getResources().getString(R.string.qiitaUri) +
                 "client_id=" + mClientId +
                 "&scope=" + mScope +
                 "&state=" + mState;

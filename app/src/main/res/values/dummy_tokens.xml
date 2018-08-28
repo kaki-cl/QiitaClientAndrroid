@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--For Publication In Github-->
+<resources>
+    <string name="dummyQiitaClientId">3415243a42525342js379275532983291</string>
+    <string name="dummyQiitaClientSecret">0934893759718957r937euoifqf92382d1hi9302</string>
+    <string name="qiitaScope">read_qiita write_qiita</string>
+    <string name="qiitaStateStr">bb17785d811bb1913ef54b0a7657de780defaa2d</string>
+    <string name="qiitaUri">https://qiita.com/api/v2/oauth/authorize?</string>
+</resources>
