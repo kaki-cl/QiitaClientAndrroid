@@ -56,9 +56,7 @@ public class NotificationMessagingService extends FirebaseMessagingService {
 //            mBuilder.setContentText("setContentText");
             mBuilder.setPriority(Notification.PRIORITY_MAX);
             mBuilder.setStyle(bigText);
-//
-//
-//
+
             NotificationManager mNotificationManager =
                     (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -69,8 +67,6 @@ public class NotificationMessagingService extends FirebaseMessagingService {
 
                 mNotificationManager.createNotificationChannel(channel);
             }
-
-
 
 //            startForeground(0, mBuilder.build());
             mNotificationManager.notify(0, mBuilder.build());

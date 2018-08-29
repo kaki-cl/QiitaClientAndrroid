@@ -29,7 +29,6 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
     private static String SECRET_KEY;
 
     public NotificationInstanceIDService() {
-
 //        try {
 //            ApplicationInfo info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
 //            ACCESS_KEY = info.metaData.getString("awsAccessKey");
@@ -122,8 +121,7 @@ public class NotificationInstanceIDService extends FirebaseInstanceIdService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lambdaResult -> { }, error -> {
                     error.printStackTrace();
-                })
-        ;
+                });
     }
 
     private String getEndPointArn() {
